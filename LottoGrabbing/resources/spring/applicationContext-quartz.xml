@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd"
+	default-autowire="no" default-lazy-init="false">
+
+	<bean id="runLottoGrabbingJX"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="LottoGrabbingJX" />
+		<property name="targetMethod" value="startGrabbing" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<bean id="runLottoGrabbingSH"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="LottoGrabbingSH" />
+		<property name="targetMethod" value="startGrabbing" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
+	<bean id="runLottoGrabbingSD"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="LottoGrabbingSD" />
+		<property name="targetMethod" value="startGrabbing" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
+	<bean id="runLottoGrabbingGD"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="LottoGrabbingGD" />
+		<property name="targetMethod" value="startGrabbing" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<bean id="runLottoGrabbingCQ"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="LottoGrabbingCQ" />
+		<property name="targetMethod" value="startGrabbing" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
+	<bean id="runLottoGrabbingTJ" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean" >
+		<property name="targetObject" ref="LottoGrabbingTJ" />
+		<property name="targetMethod" value="startGrabbing" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
+	<bean id="runLottoGrabbingXJ" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean" >
+		<property name="targetObject" ref="LottoGrabbingXJ" />
+		<property name="targetMethod" value="startGrabbing" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<bean id="runLottoGrabbingAH"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="LottoGrabbingAH" />
+		<property name="targetMethod" value="startGrabbing" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<bean id="runLottoGrabbingJS"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="LottoGrabbingJS" />
+		<property name="targetMethod" value="startGrabbing" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<bean id="runLottoGrabbingCheck"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="LottoGrabbingCheck" />
+		<property name="targetMethod" value="startChecking" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<bean id="cronTriggerJX" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="runLottoGrabbingJX" />
+		<property name="cronExpression" value="0 0/1 * * * ?" />
+
+	</bean>
+	
+	<bean id="cronTriggerSH" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="runLottoGrabbingSH" />
+		<property name="cronExpression" value="0 0/1 * * * ?" />
+
+	</bean>
+
+	<bean id="cronTriggerSD" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="runLottoGrabbingSD" />
+		<property name="cronExpression" value="0 0/1 * * * ?" />
+
+	</bean>
+
+	<bean id="cronTriggerGD" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="runLottoGrabbingGD" />
+		<property name="cronExpression" value="0 0/1 * * * ?" />
+
+	</bean>
+
+	<bean id="cronTriggerCQ" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="runLottoGrabbingCQ" />
+		<property name="cronExpression" value="0 0/1 * * * ?" />
+
+	</bean>
+	
+	<bean id="cronTriggerTJ" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="runLottoGrabbingTJ" />
+		<property name="cronExpression" value="0 0/1 * * * ?" />
+
+	</bean>
+	
+	<bean id="cronTriggerXJ" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="runLottoGrabbingXJ" />
+		<property name="cronExpression" value="0 0/1 * * * ?" />
+
+	</bean>
+
+	<bean id="cronTriggerAH" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="runLottoGrabbingAH" />
+		<property name="cronExpression" value="0 0/1 * * * ?" />
+
+	</bean>
+
+	<bean id="cronTriggerJS" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="runLottoGrabbingJS" />
+		<property name="cronExpression" value="0 0/1 * * * ?" />
+
+	</bean>
+
+	<bean id="cronTriggerCheck" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="runLottoGrabbingCheck" />
+		<property name="cronExpression" value="0 0/1 * * * ?" />
+
+	</bean>
+
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean"
+		depends-on="sysParamManager">
+		<property name="triggers">
+			<list>
+				<ref bean="cronTriggerJX" />
+				<ref bean="cronTriggerSH" />
+				<ref bean="cronTriggerGD" />
+				<ref bean="cronTriggerCQ" />
+				<ref bean="cronTriggerTJ" />
+				<ref bean="cronTriggerXJ" />
+				<ref bean="cronTriggerSD" />
+				<ref bean="cronTriggerJS" />
+				<ref bean="cronTriggerAH" />
+			</list>
+		</property>
+		<property name="quartzProperties">
+			<bean
+				class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+				<property name="location" value="classpath:quartz.properties" />
+			</bean>
+		</property>
+		<property name="waitForJobsToCompleteOnShutdown" value="false" />
+
+	</bean>
+
+</beans>
