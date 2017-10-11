@@ -57,6 +57,7 @@ public class LottoGrabbingTask {
 		try {
 			
 			con.data(httpRequestInfo);
+			con.timeout(10000);
 			response = con.post();
 			String rd = response.select("body").text();
 
