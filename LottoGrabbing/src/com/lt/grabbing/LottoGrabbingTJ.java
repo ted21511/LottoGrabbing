@@ -65,7 +65,9 @@ public class LottoGrabbingTJ extends LottoGrabbingTask {
 					String mappingNumber = dList.getNumber();
 					if (awardMap != null) {
 						newAward = awardMap.get(mappingNumber);
+						if(newAward != null){
 						drawDAO.updateDrawResult(GameCode.LT.name(), Market.TJ.name(), mappingNumber, newAward);
+						}
 					} else {
 
 						if (mappingNumber.equals(newNumber) && dList.getResult() == null) {

@@ -36,7 +36,7 @@ public class LottoGrabbingJS extends LottoGrabbingTask {
 	public void startGrabbing() {
 		try {
 //			Document doc = Jsoup.parse(new URL(url).openStream(), "UTF-8", url);
-			Document doc = Jsoup.connect(url).timeout(5000).get();
+			Document doc = Jsoup.connect(url).timeout(10000).get();
 			Elements elements = doc.select(".start");
 			elements.remove(0);
 			elements.remove(0);
@@ -68,7 +68,7 @@ public class LottoGrabbingJS extends LottoGrabbingTask {
 				processDrawData(drawNumber, drawResult);
 			}
 			error = 1;
-		} catch (ConnectException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			if (error <= 3) {
 				System.out.println("JS錯誤次數:" + error);
@@ -79,13 +79,7 @@ public class LottoGrabbingJS extends LottoGrabbingTask {
 				//sendNotifyMail("Error in drawing " + Market.JS.name() + " data","Error message: " + e.getMessage());
 				error = 1;
 			}
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-			logger.error("Error in drawing " + Market.JS.name() + " data. Error message: " + e.getMessage());
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
-			logger.error("Error in drawing " + Market.JS.name() + " data. Error message: " + ioe.getMessage());
-		}
+		} 
 	}
 
 	private void processDrawData(String drawNumber, String drawResult) {

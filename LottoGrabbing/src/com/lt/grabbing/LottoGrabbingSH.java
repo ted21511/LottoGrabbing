@@ -33,7 +33,7 @@ public class LottoGrabbingSH extends LottoGrabbingTask {
 	}
 	public void startGrabbing() {
 		try {
-			Document doc = Jsoup.connect(url).timeout(5000).get();
+			Document doc = Jsoup.connect(url).timeout(10000).get();
 			Elements tdList = doc.select("td");
 			
 			int counter = 0;
@@ -60,7 +60,7 @@ public class LottoGrabbingSH extends LottoGrabbingTask {
 				removeProcessedData();
 			}
 			error = 1;
-		} catch (SocketTimeoutException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			if (error <= 3) {
 				System.out.println("SH錯誤次數:" + error);
@@ -71,10 +71,7 @@ public class LottoGrabbingSH extends LottoGrabbingTask {
 				//sendNotifyMail("Error in drawing " + Market.SH.name() + " data","Error message: " + e.getMessage());
 				error = 1;
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
-			logger.error("Error in drawing " + Market.SH.name() + " data. Error message: " + e.getMessage());
-		}
+		} 
 	}
 
 	private void processDrawData(String drawNumber, String drawResult) {

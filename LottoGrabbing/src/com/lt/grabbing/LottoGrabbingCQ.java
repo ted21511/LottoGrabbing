@@ -35,7 +35,7 @@ public class LottoGrabbingCQ extends LottoGrabbingTask {
 	public void startGrabbing() {
 		try {
 			System.out.println("----------lotto CQ start----------");
-			Document xmlDoc = Jsoup.parse(new URL(url), 5000);
+			Document xmlDoc = Jsoup.parse(new URL(url), 10000);
 			String resultTime = LottoCQUtils.getNowDateTime();
 			List<Draw> list = null;
 			List<Draw> drawlist = null;
@@ -59,9 +59,10 @@ public class LottoGrabbingCQ extends LottoGrabbingTask {
 					String mappingNumber = dList.getNumber();
 					if (awardMap != null) {
 						String tmpnewAward = awardMap.get(mappingNumber.substring(2));
+						if (tmpnewAward != null){
 						newAward = tmpnewAward.replace("-", "");
 						drawDAO.updateDrawResult(GameCode.LT.name(), Market.CQ.name(), mappingNumber, newAward);
-
+						}
 					} else {
 
 						if (mappingNumber.equals(newNumber) && dList.getResult() == null) {

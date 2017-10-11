@@ -41,7 +41,7 @@ public class LottoGrabbingAH extends LottoGrabbingTask {
 			System.out.println("********** Start AH Drawing, ISSUE_PERIOD=" + ISSUE_PERIOD + "**********");
 
 			Pattern pattern = Pattern.compile("[0-9]*");
-			Document doc = Jsoup.connect(url).timeout(5000).get();
+			Document doc = Jsoup.connect(url).timeout(10000).get();
 
 			System.out.println("********** Start AH parsing **********");
 			// Document doc = Jsoup.parse(downloadHtml(url));
@@ -90,10 +90,7 @@ public class LottoGrabbingAH extends LottoGrabbingTask {
 			}
 			System.out.println("********** End AH **********");
 			error = 1;
-		} catch (HttpStatusException e) {
-			e.printStackTrace();
-			logger.error("Error in drawing " + Market.AH.name() + " data. Error message: " + e.getMessage());
-		} catch (ConnectException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			if (error <= 3) {
 				System.out.println("AH錯誤次數:" + error);
@@ -103,10 +100,7 @@ public class LottoGrabbingAH extends LottoGrabbingTask {
 				logger.error("Error in drawing " + Market.AH.name() + " data. Error message: " + e.getMessage());
 				//sendNotifyMail("Error in drawing " + Market.AH.name() + " data","Error message: " + e.getMessage());
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
-			logger.error("Error in drawing " + Market.AH.name() + " data. Error message: " + e.getMessage());
-		}
+		} 
 	}
 
 	private void processDrawData(String drawNumber, String drawResult) {

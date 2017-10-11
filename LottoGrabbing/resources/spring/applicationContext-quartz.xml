@@ -65,12 +65,12 @@
 		<property name="concurrent" value="false" />
 	</bean>
 
-	<bean id="runLottoGrabbingCheck"
-		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-		<property name="targetObject" ref="LottoGrabbingCheck" />
-		<property name="targetMethod" value="startChecking" />
-		<property name="concurrent" value="false" />
-	</bean>
+<!-- 	<bean id="runLottoGrabbingCheck" -->
+<!-- 		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"> -->
+<!-- 		<property name="targetObject" ref="LottoGrabbingCheck" /> -->
+<!-- 		<property name="targetMethod" value="startChecking" /> -->
+<!-- 		<property name="concurrent" value="false" /> -->
+<!-- 	</bean> -->
 
 	<bean id="cronTriggerJX" class="org.springframework.scheduling.quartz.CronTriggerBean">
 		<property name="jobDetail" ref="runLottoGrabbingJX" />
@@ -126,11 +126,11 @@
 
 	</bean>
 
-	<bean id="cronTriggerCheck" class="org.springframework.scheduling.quartz.CronTriggerBean">
-		<property name="jobDetail" ref="runLottoGrabbingCheck" />
-		<property name="cronExpression" value="0 0/1 * * * ?" />
+<!-- 	<bean id="cronTriggerCheck" class="org.springframework.scheduling.quartz.CronTriggerBean"> -->
+<!-- 		<property name="jobDetail" ref="runLottoGrabbingCheck" /> -->
+<!-- 		<property name="cronExpression" value="0 0/1 * * * ?" /> -->
 
-	</bean>
+<!-- 	</bean> -->
 
 	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean"
 		depends-on="sysParamManager">

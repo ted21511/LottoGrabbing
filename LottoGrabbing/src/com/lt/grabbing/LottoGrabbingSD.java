@@ -42,7 +42,7 @@ public class LottoGrabbingSD extends LottoGrabbingTask {
 	public void startGrabbing() {
 		try {
 			System.out.println("********** Start SD Drawing, ISSUE_PERIOD="+ISSUE_PERIOD+"**********");
-			Document doc= Jsoup.parse(new URL(url), 5000);
+			Document doc= Jsoup.parse(new URL(url), 10000);
 //			Document doc = Jsoup.parse(downloadHtml(url));
 			Elements tablelist = doc.select("table");
 			if (tablelist.size() >= 15) {
@@ -78,7 +78,7 @@ public class LottoGrabbingSD extends LottoGrabbingTask {
 			}
 			System.out.println("********** End SD **********");
 			error = 1;
-		} catch (SocketTimeoutException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			if (error <= 3) {
 				System.out.println("SD錯誤次數:" + error);
@@ -89,15 +89,7 @@ public class LottoGrabbingSD extends LottoGrabbingTask {
 				//sendNotifyMail("Error in drawing " + Market.SD.name() + " data","Error message: " + e.getMessage());
 				error = 1;
 			}
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-			logger.error("Error in drawing " + Market.SD.name() + " data. Error message: " + e.getMessage());
-//			sendNotifyMail("Error in drawing " + Market.SD.name() + " data", "Error message: " + e.getMessage());
-		} catch (IOException e) {
-			e.printStackTrace();
-			logger.error("Error in drawing " + Market.SD.name() + " data. Error message: " + e.getMessage());
-//			sendNotifyMail("Error in drawing " + Market.SD.name() + " data", "Error message: " + e.getMessage());
-		}
+		} 
 
 	}
 

@@ -71,7 +71,7 @@ public class LottoGrabbingTask {
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("Error in posting data. Error message: " + e.getMessage());
-			sendNotifyMail("Error in posting data", "Error message: " + e.getMessage());
+			//sendNotifyMail("Error in posting data", "Error message: " + e.getMessage());
 
 		}
 		

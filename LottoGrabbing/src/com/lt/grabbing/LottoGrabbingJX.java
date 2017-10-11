@@ -33,7 +33,7 @@ public class LottoGrabbingJX extends LottoGrabbingTask {
 	public void startGrabbing() {
 		try {
 //			Document doc = Jsoup.parse(new URL(url).openStream(), "UTF-8", url);
-			Document doc = Jsoup.connect(url).timeout(5000).get();
+			Document doc = Jsoup.connect(url).timeout(10000).get();
 			Elements tablelist = doc.select("table");
 			if (tablelist.size() >= 12) {
 				Element targetTable = tablelist.get(11);
@@ -55,7 +55,7 @@ public class LottoGrabbingJX extends LottoGrabbingTask {
 				}
 			}
 			error = 1;
-		} catch (SocketTimeoutException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			if (error <= 3) {
 				System.out.println("JX錯誤次數:" + error);
@@ -66,11 +66,7 @@ public class LottoGrabbingJX extends LottoGrabbingTask {
 				//sendNotifyMail("Error in drawing " + Market.JX.name() + " data","Error message: " + e.getMessage());
 				error = 1;
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
-			logger.error("Error in drawing " + Market.JX.name() + " data. Error message: " + e.getMessage());
-		}
-		
+		} 
 	}
 
 	private void processDrawData(String drawNumber, String drawResult) {

@@ -28,7 +28,7 @@ public class LottoGrabbingXJ extends LottoGrabbingTask {
 	public void startGrabbing() {
 		try {
 			System.out.println("----------lotto XJ start----------");
-			Document xmlDoc = Jsoup.connect(url).timeout(5000).post();
+			Document xmlDoc = Jsoup.connect(url).timeout(10000).post();
 			String resultTime = LottoXJUtils.getNowDateTime();
 			List<Draw> list = null;
 			List<Draw> drawlist = null;
@@ -54,7 +54,9 @@ public class LottoGrabbingXJ extends LottoGrabbingTask {
 					String mappingNumber = dList.getNumber();
 					if (awardMap != null) {
 						 newAward = awardMap.get(mappingNumber);
+		                 if (newAward != null){			 
 						 drawDAO.updateDrawResult(GameCode.LT.name(), Market.XJ.name(), mappingNumber, newAward);
+		                 }
 					} else {
 
 						if (mappingNumber.equals(newNumber) && dList.getResult() == null) {
