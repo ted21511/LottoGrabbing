@@ -1,17 +1,10 @@
 package com.lt.grabbing;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.ConnectException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -128,33 +121,6 @@ public class LottoGrabbingAH extends LottoGrabbingTask {
 			}
 		}
 
-	}
-
-	private String downloadHtml(String path) {
-		InputStream is = null;
-		try {
-			String result = "";
-			String line;
-
-			URL url = new URL(path);
-			is = url.openStream();// throws an IOException
-			BufferedReader br = new BufferedReader(new InputStreamReader(is));
-
-			while ((line = br.readLine()) != null) {
-				result += line;
-			}
-			return result;
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
-		} finally {
-			try {
-				if (is != null)
-					is.close();
-			} catch (IOException ioe) {
-				// nothing to see here
-			}
-		}
-		return "";
 	}
 
 	public void setISSUE_PERIOD(int ISSUE_PERIOD) {

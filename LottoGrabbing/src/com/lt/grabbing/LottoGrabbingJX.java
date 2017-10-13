@@ -1,8 +1,5 @@
 package com.lt.grabbing;
 
-import java.io.IOException;
-import java.net.SocketTimeoutException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -20,7 +17,6 @@ import com.lt.util.Market;
 public class LottoGrabbingJX extends LottoGrabbingTask {
 	private int ISSUE_PERIOD;// = 10;
 	private String url;// = "https://www.ydniu.com/open/70.html";
-	private List<String> DATAS = new ArrayList<String>();
 	int error = 1;
 
 	private static final Logger logger = LoggerFactory.getLogger(LottoGrabbingGD.class);
@@ -93,15 +89,6 @@ public class LottoGrabbingJX extends LottoGrabbingTask {
 			}
 		}
 
-	}
-
-	private void removeProcessedData() {
-		DATAS.remove(0);
-		DATAS.remove(0);
-		DATAS.remove(0);
-		DATAS.remove(0);
-		DATAS.remove(0);
-		DATAS.remove(0);
 	}
 
 	public void setISSUE_PERIOD(int ISSUE_PERIOD) {

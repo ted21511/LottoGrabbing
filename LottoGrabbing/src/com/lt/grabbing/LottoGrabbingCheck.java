@@ -25,9 +25,14 @@ public class LottoGrabbingCheck extends LottoGrabbingTask{
 			List<Draw> result = drawDAO.getCountOfStatusL(market.getMarketName(), market.getGameCode(), dateStr);
 			resultStr += "Draw_date: " + dateStr + ", Market: " + market.getMarketName() + 
 					", GameCode: " + market.getGameCode() + ", count: " + result.size() + "\n";
+			
+			if (result.size() >= 3) {
+				sendNotifyMail("Market exception in [" + market.getMarketName() + "] Please check", "[" + market.getMarketName() + "]" + "超過三期DATA未更新，請檢查網站/期號是否正常。");
+			}
 		}
+		System.out.println(resultStr);
 		try {
-            File file = new File("/usr/local/applications/lt-grabbing-server/result.txt");
+            File file = new File("/usr/local/applications/lt-grabbing-server/lotto-check-result.txt");
             BufferedWriter output = new BufferedWriter(new FileWriter(file));
             output.write(resultStr);
             output.close();
