@@ -1,11 +1,5 @@
 package com.lt.grabbing;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -119,38 +113,38 @@ public class LottoGrabbingSD extends LottoGrabbingTask {
 
 	}
 	
-	private String downloadHtml(String path) {
-		System.out.println("********** Start SD downloadHtml **********");
-		InputStream is = null;
-		try {
-			String result = "";
-			String line;
-
-			URL url = new URL(path);
-			System.out.println("********** Start SD url.openStream() **********");
-			is = url.openStream();// throws an IOException
-			BufferedReader br = new BufferedReader(new InputStreamReader(is));
-
-			while ((line = br.readLine()) != null) {
-				result += line;
-			}
-			System.out.println("********** End SD downloadHtml **********");
-			return result;
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
-			sendNotifyMail("Error in downloadHtml " + Market.SD.name() + " data",
-					"Error message: " + ioe.getMessage());
-		} finally {
-			try {
-				if (is != null)
-					is.close();
-			} catch (IOException ioe) {
-				// nothing to see here
-			}
-			System.out.println("********** End SD downloadHtml finally **********");
-		}
-		return "";
-	}
+//	private String downloadHtml(String path) {
+//		System.out.println("********** Start SD downloadHtml **********");
+//		InputStream is = null;
+//		try {
+//			String result = "";
+//			String line;
+//
+//			URL url = new URL(path);
+//			System.out.println("********** Start SD url.openStream() **********");
+//			is = url.openStream();// throws an IOException
+//			BufferedReader br = new BufferedReader(new InputStreamReader(is));
+//
+//			while ((line = br.readLine()) != null) {
+//				result += line;
+//			}
+//			System.out.println("********** End SD downloadHtml **********");
+//			return result;
+//		} catch (IOException ioe) {
+//			ioe.printStackTrace();
+//			sendNotifyMail("Error in downloadHtml " + Market.SD.name() + " data",
+//					"Error message: " + ioe.getMessage());
+//		} finally {
+//			try {
+//				if (is != null)
+//					is.close();
+//			} catch (IOException ioe) {
+//				// nothing to see here
+//			}
+//			System.out.println("********** End SD downloadHtml finally **********");
+//		}
+//		return "";
+//	}
 
 	private void removeProcessedData(List<String> datas) {
 		datas.remove(0);
