@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd"
+	default-autowire="no" default-lazy-init="false">
+
+<!--  	<bean id="runLottoGrabbingCheck" -->
+<!--  		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"> -->
+<!--  		<property name="targetObject" ref="LottoGrabbingCheck" /> -->
+<!--  		<property name="targetMethod" value="startChecking" />  	 -->
+<!--  		<property name="concurrent" value="false" /> -->
+<!--  	</bean>  -->
+
+<!--  	<bean id="cronTriggerCheck" class="org.springframework.scheduling.quartz.CronTriggerBean"> -->
+<!--  		<property name="jobDetail" ref="runLottoGrabbingCheck" /> -->
+<!--  		<property name="cronExpression" value="0 0/1 * * * ?" /> -->
+<!--  	</bean>  -->
+
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean"
+		depends-on="sysParamManager">
+		<property name="triggers">
+			<list>		
+<!-- 				<ref bean="cronTriggerCheck" /> -->
+			</list>
+		</property>
+		<property name="quartzProperties">
+			<bean
+				class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+				<property name="location" value="classpath:quartz.properties" />
+			</bean>
+		</property>
+		<property name="waitForJobsToCompleteOnShutdown" value="false" />
+
+	</bean>
+
+</beans>

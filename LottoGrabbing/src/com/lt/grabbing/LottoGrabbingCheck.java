@@ -10,9 +10,10 @@ import java.util.Date;
 import java.util.List;
 
 import com.ct.lk.domain.Draw;
-import com.lt.util.Market;
+import com.lk.share.LottoKenoGrabbingTask;
+import com.lk.share.Market;
 
-public class LottoGrabbingCheck extends LottoGrabbingTask{
+public class LottoGrabbingCheck extends LottoKenoGrabbingTask{
 	
 	public void startChecking() {
 		System.out.println("********** Start Lotto Grabbing Checking **********");

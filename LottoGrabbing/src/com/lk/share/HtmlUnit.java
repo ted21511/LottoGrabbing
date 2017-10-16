@@ -1,6 +1,4 @@
-package com.lt.util;
-
-import java.io.IOException;
+package com.lk.share;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -21,7 +19,7 @@ public class HtmlUnit {
 		doc = Jsoup.parseBodyFragment(page.asXml());
 		wc.closeAllWindows();
 		
-		} catch (IOException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -38,7 +36,7 @@ public class HtmlUnit {
 		doc = Jsoup.parseBodyFragment(page.asXml());
 		wc.closeAllWindows();
 		
-		} catch (IOException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

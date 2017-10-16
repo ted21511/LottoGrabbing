@@ -12,26 +12,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.ct.lk.domain.Draw;
-import com.lt.util.GameCode;
+import com.lk.share.GameCode;
+import com.lk.share.LottoKenoGrabbingTask;
+import com.lk.share.Market;
 import com.lt.util.LottoCQUtils;
-import com.lt.util.Market;
 
-public class LottoGrabbingCQ extends LottoGrabbingTask {
+public class LottoGrabbingCQ extends LottoKenoGrabbingTask {
 
 	private static final Logger logger = LoggerFactory.getLogger(LottoGrabbingCQ.class);
 	private static boolean flag = true;
 	private String url;
 	int error = 1;
+	
 	// public static void main(String[] args) {
 	// LottoGrabbingCQ task = new LottoGrabbingCQ();
 	// task.startGrabbing();
 	// }
-	//
-	// public void start() {
-	// LottoGrabbingCQ task = new LottoGrabbingCQ();
-	// task.loadConfiguration();
-	// }
-
+	
 	public void startGrabbing() {
 		try {
 			System.out.println("----------lotto CQ start----------");

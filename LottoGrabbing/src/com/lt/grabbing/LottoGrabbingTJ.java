@@ -11,12 +11,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.ct.lk.domain.Draw;
-import com.lt.util.GameCode;
-import com.lt.util.HtmlUnit;
+import com.lk.share.GameCode;
+import com.lk.share.HtmlUnit;
+import com.lk.share.LottoKenoGrabbingTask;
+import com.lk.share.Market;
 import com.lt.util.LottoTJUtils;
-import com.lt.util.Market;
 
-public class LottoGrabbingTJ extends LottoGrabbingTask {
+public class LottoGrabbingTJ extends LottoKenoGrabbingTask {
 
 	private static final Logger logger = LoggerFactory.getLogger(LottoGrabbingTJ.class);
 	private String url;
@@ -66,7 +67,7 @@ public class LottoGrabbingTJ extends LottoGrabbingTask {
 					if (awardMap != null) {
 						newAward = awardMap.get(mappingNumber);
 						if(newAward != null){
-						drawDAO.updateDrawResult(GameCode.LT.name(), Market.TJ.name(), mappingNumber, newAward);
+							drawDAO.updateDrawResult(GameCode.LT.name(), Market.TJ.name(), mappingNumber, newAward);
 						}
 					} else {
 

@@ -14,10 +14,11 @@ import org.slf4j.LoggerFactory;
 
 import com.ct.lk.domain.Draw;
 import com.google.common.collect.Lists;
-import com.lt.util.GameCode;
-import com.lt.util.Market;
+import com.lk.share.GameCode;
+import com.lk.share.LottoKenoGrabbingTask;
+import com.lk.share.Market;
 
-public class LottoGrabbingGD extends LottoGrabbingTask {
+public class LottoGrabbingGD extends LottoKenoGrabbingTask {
 	private int ISSUE_PERIOD;// = 10;
 	private String url;// = "http://www.gdlottery.cn/odata/zst11xuan5.jspx";
 	int error = 1;

@@ -1,4 +1,4 @@
-package com.lt.util;
+package com.lk.share;
 
 public class PostDataInfo {
 	private String __EVENTTARGET;

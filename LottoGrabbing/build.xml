@@ -19,8 +19,6 @@
 	<target name="clean">
 		<delete dir="${basedir}/build" />
 		<delete dir="${basedir}/dist" />
-
-
 	</target>
 
 	<target name="compile" depends="clean">

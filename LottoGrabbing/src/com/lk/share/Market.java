@@ -1,6 +1,6 @@
-package com.lt.util;
+package com.lk.share;
 
-import com.lt.util.Market;
+import com.lk.share.Market;
 
 public enum Market {
 	
