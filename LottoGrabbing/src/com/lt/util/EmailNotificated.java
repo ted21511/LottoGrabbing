@@ -1,4 +1,4 @@
-package com.lk.share;
+package com.lt.util;
 
 import java.util.Properties;
 

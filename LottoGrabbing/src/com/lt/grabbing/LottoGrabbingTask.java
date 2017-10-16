@@ -1,4 +1,4 @@
-package com.lk.share;
+package com.lt.grabbing;
 
 import java.util.HashMap;
 import java.util.Properties;
@@ -11,49 +11,26 @@ import org.slf4j.Logger;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.lk.dao.DrawDAO;
+import com.lt.util.EmailNotificated;
+import com.lt.util.SmtpInfo;
 
-public class LottoKenoGrabbingTask extends Thread {
+public class LottoGrabbingTask extends Thread {
 
 	public static SmtpInfo smtpEmailProperties;
 	public static Properties marketUrlproperties;
 	public static String socketHttpDestination;
 	public static DrawDAO drawDAO;
 	public static String proxyHost = "proxy.hinet.net";
-	public static String[] mainGame = { "lt", "kn" };
-	public String game;
-	public int index;
-	
-
-	public void gameName(String game,int index) {
-		this.game = game;
-		this.index = index;
-	}
-
+			
 	public static void main(String[] args) {
-		
-		 int i = 1;
-			for (String game : mainGame) {
-				LottoKenoGrabbingTask task = new LottoKenoGrabbingTask();
-				task.gameName(game,i);
-				task.start();
-				i++;
-			}
-
-		// LottoGrabbingTask task = new LottoGrabbingTask();
-		// task.loadConfiguration();
+		 LottoGrabbingTask task = new LottoGrabbingTask();
+		 task.loadConfiguration();
 	}
 	
-
-	public void run() {
-
-		loadConfiguration(game,index);
-
-	}
-
-	public void loadConfiguration(String game,int index) {
+	public void loadConfiguration() {
 		try {
 			
-			String[] config= { "classpath:spring/applicationContext*.xml","classpath:spring/" + game + "-applicationContext*.xml" };
+			String[] config= { "classpath:spring/applicationContext*.xml","classpath:spring/applicationContext*.xml" };
 			System.out.println("server initializing... xml loading...");
 			ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext();
 			context.setConfigLocations(config);
@@ -69,7 +46,7 @@ public class LottoKenoGrabbingTask extends Thread {
 	}
 
 	public void startGrabbing() {
-		System.out.println("********** Start Lotto Keno Grabbing... **********");
+		System.out.println("********** Start Lotto Grabbing... **********");
 	}
 
 	protected void updateData(String socketHttpDestination, HashMap<String, String> httpRequestInfo, Logger logger) {

@@ -12,11 +12,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.ct.lk.domain.Draw;
-import com.lk.share.GameCode;
-import com.lk.share.LottoKenoGrabbingTask;
-import com.lk.share.Market;
+import com.lt.util.GameCode;
+import com.lt.util.Market;
 
-public class LottoGrabbingSH extends LottoKenoGrabbingTask {
+public class LottoGrabbingSH extends LottoGrabbingTask {
 	private int ISSUE_PERIOD;// = 10;
 	private int DATA_COUNTER;
 	private String url;// = "http://tc.gooooal.com/bonussh115!query.action";

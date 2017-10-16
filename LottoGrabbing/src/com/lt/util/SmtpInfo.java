@@ -1,4 +1,4 @@
-package com.lk.share;
+package com.lt.util;
 
 public class SmtpInfo {
 	private String smtpName;

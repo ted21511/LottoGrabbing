@@ -13,11 +13,10 @@ import org.slf4j.LoggerFactory;
 
 import com.ct.lk.domain.Draw;
 import com.google.common.collect.Lists;
-import com.lk.share.GameCode;
-import com.lk.share.LottoKenoGrabbingTask;
-import com.lk.share.Market;
+import com.lt.util.GameCode;
+import com.lt.util.Market;
 
-public class LottoGrabbingAH extends LottoKenoGrabbingTask {
+public class LottoGrabbingAH extends LottoGrabbingTask {
 	private int ISSUE_PERIOD;// = 10;
 	private String url;// = "http://data.ahfc.gov.cn/k3/index.html";
 	int error = 1;

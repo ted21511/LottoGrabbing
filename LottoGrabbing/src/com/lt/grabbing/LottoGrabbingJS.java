@@ -13,11 +13,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.ct.lk.domain.Draw;
-import com.lk.share.GameCode;
-import com.lk.share.LottoKenoGrabbingTask;
-import com.lk.share.Market;
+import com.lt.util.GameCode;
+import com.lt.util.Market;
 
-public class LottoGrabbingJS extends LottoKenoGrabbingTask {
+public class LottoGrabbingJS extends LottoGrabbingTask {
 	private int ISSUE_PERIOD; //= 10;
 	private String url; //= "http://caipiao.163.com/award/jskuai3/";
 	int error = 1;

@@ -10,8 +10,6 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
-import com.lk.share.PostDataInfo;
-
 public class LottoCQUtils {
 	
 	public static Elements getNowNumber(Document xmlDoc) {

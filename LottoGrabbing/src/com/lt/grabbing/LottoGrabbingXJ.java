@@ -11,12 +11,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.ct.lk.domain.Draw;
-import com.lk.share.GameCode;
-import com.lk.share.LottoKenoGrabbingTask;
-import com.lk.share.Market;
+import com.lt.util.GameCode;
 import com.lt.util.LottoXJUtils;
+import com.lt.util.Market;
 
-public class LottoGrabbingXJ extends LottoKenoGrabbingTask {
+public class LottoGrabbingXJ extends LottoGrabbingTask {
 
 	private static final Logger logger = LoggerFactory.getLogger(LottoGrabbingTJ.class);
 	private String url;

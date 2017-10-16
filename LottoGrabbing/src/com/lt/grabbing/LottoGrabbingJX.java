@@ -11,11 +11,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.ct.lk.domain.Draw;
-import com.lk.share.GameCode;
-import com.lk.share.LottoKenoGrabbingTask;
-import com.lk.share.Market;
+import com.lt.util.GameCode;
+import com.lt.util.Market;
 
-public class LottoGrabbingJX extends LottoKenoGrabbingTask {
+public class LottoGrabbingJX extends LottoGrabbingTask {
 	private int ISSUE_PERIOD;// = 10;
 	private String url;// = "https://www.ydniu.com/open/70.html";
 	int error = 1;
