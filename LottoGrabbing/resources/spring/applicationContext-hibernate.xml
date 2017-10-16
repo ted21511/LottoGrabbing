@@ -65,7 +65,7 @@
 	
 	<bean id="LottoKenoGrabbingTask" class="com.lt.grabbing.LottoGrabbingTask" init-method="startGrabbing">
 		<property name="smtpEmailProperties" ref="smtpEmailProperties" />
-		<property name="socketHttpDestination" value="${socketServer.http.destination}" />
+		<property name="socketHttpDestination" value="${lt.socketServer.http.destination}" />
 		<property name="drawDAO" ref="DrawDAO" />			
 	</bean>
 	
