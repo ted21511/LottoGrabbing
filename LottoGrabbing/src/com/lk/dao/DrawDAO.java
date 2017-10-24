@@ -22,7 +22,7 @@ public class DrawDAO {
 		checkSql.append("and game_code = '" + gameCode + "' ");
 		checkSql.append("and market = '" + market + "' ");
 		checkSql.append("and status = 'L' ");
-		checkSql.append("and result = NULL ");
+		checkSql.append("and result is NULL ");
 		
 		return genericHibernateDao.findBySql(Draw.class, checkSql.toString());
 	}
