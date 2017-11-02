@@ -28,16 +28,10 @@ public class LottoGrabbingSD extends LottoGrabbingTask {
 		task.startGrabbing();
 	}
 
-	// public void start() {
-	// LottoGrabbingSD task = new LottoGrabbingSD();
-	// task.loadConfiguration();
-	// }
-
 	public void startGrabbing() {
 		try {
 			System.out.println("********** Start SD Drawing, ISSUE_PERIOD="+ISSUE_PERIOD+"**********");
 			Document doc= Jsoup.parse(new URL(url), 10000);
-//			Document doc = Jsoup.parse(downloadHtml(url));
 			Elements tablelist = doc.select("table");
 			if (tablelist.size() >= 15) {
 				Element targetTable = tablelist.get(14);
@@ -63,9 +57,6 @@ public class LottoGrabbingSD extends LottoGrabbingTask {
 					drawResult = "[" + datas.get(1) + "," + datas.get(2) + "," + datas.get(3) + "," + datas.get(4) + ","
 							+ datas.get(5) + "]";
 	
-					//System.out.println("********** ProcessDrawData -> DrawNumber = " + drawNumber + ", DrawResult = " + drawResult + " **********");
-					//logger.info("********** ProcessDrawData -> DrawNumber = " + drawNumber + ", DrawResult = " + drawResult + " **********");
-	
 					processDrawData(drawNumber, drawResult);
 					removeProcessedData(datas);
 				}
@@ -80,7 +71,6 @@ public class LottoGrabbingSD extends LottoGrabbingTask {
 				changeIP();
 			} else {
 				logger.error("Error in drawing " + Market.SD.name() + " data. Error message: " + e.getMessage());
-				//sendNotifyMail("Error in drawing " + Market.SD.name() + " data","Error message: " + e.getMessage());
 				error = 1;
 			}
 		} 
@@ -91,7 +81,6 @@ public class LottoGrabbingSD extends LottoGrabbingTask {
 		List<Draw> checkResult = drawDAO.selectByDrawNumberAndMarket(Market.SD.name(), drawNumber, GameCode.HL11x5.name());
 
 		if (!checkResult.isEmpty()) {
-			//System.out.println("Target DRAW data: " + checkResult.get(0).drawNumberLogInfo());
 			Draw draw = checkResult.get(0);
 			HashMap<String, String> httpRequestInfo = new HashMap<String, String>();
 			
@@ -102,49 +91,17 @@ public class LottoGrabbingSD extends LottoGrabbingTask {
 				httpRequestInfo.put("drawNumber", drawNumber);
 				httpRequestInfo.put("result", drawResult);
 
-				updateData(socketHttpDestination, httpRequestInfo, logger);
+				if (draw.getResult() == null || draw.getResult().length() == 0) {
+					updateData(socketHttpDestination, httpRequestInfo, logger);
+				}
 
 			} catch (Exception e) {
 				e.printStackTrace();			
-				logger.error("Error in drawing " + Market.SD.name() + " data. Error message: " + e.getMessage());
-				//sendNotifyMail("Error in drawing " + Market.SD.name() + " data","Error message: " + e.getMessage());					
+				logger.error("Error in drawing " + Market.SD.name() + " data. Error message: " + e.getMessage());				
 			}
 		}
 
 	}
-	
-//	private String downloadHtml(String path) {
-//		System.out.println("********** Start SD downloadHtml **********");
-//		InputStream is = null;
-//		try {
-//			String result = "";
-//			String line;
-//
-//			URL url = new URL(path);
-//			System.out.println("********** Start SD url.openStream() **********");
-//			is = url.openStream();// throws an IOException
-//			BufferedReader br = new BufferedReader(new InputStreamReader(is));
-//
-//			while ((line = br.readLine()) != null) {
-//				result += line;
-//			}
-//			System.out.println("********** End SD downloadHtml **********");
-//			return result;
-//		} catch (IOException ioe) {
-//			ioe.printStackTrace();
-//			sendNotifyMail("Error in downloadHtml " + Market.SD.name() + " data",
-//					"Error message: " + ioe.getMessage());
-//		} finally {
-//			try {
-//				if (is != null)
-//					is.close();
-//			} catch (IOException ioe) {
-//				// nothing to see here
-//			}
-//			System.out.println("********** End SD downloadHtml finally **********");
-//		}
-//		return "";
-//	}
 
 	private void removeProcessedData(List<String> datas) {
 		datas.remove(0);

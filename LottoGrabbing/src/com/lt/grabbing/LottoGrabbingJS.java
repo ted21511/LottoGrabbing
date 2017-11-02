@@ -31,7 +31,6 @@ public class LottoGrabbingJS extends LottoGrabbingTask {
 	
 	public void startGrabbing() {
 		try {
-//			Document doc = Jsoup.parse(new URL(url).openStream(), "UTF-8", url);
 			Document doc = Jsoup.connect(url).timeout(10000).get();
 			Elements elements = doc.select(".start");
 			elements.remove(0);
@@ -58,9 +57,6 @@ public class LottoGrabbingJS extends LottoGrabbingTask {
 				drawNumber = drawNumberList.get(i);
 				drawResult = map.get(drawNumber);
 
-				//System.out.println("********** ProcessDrawData -> DrawNumber = " + drawNumber + ", DrawResult = " + drawResult + " **********");
-				//logger.info("********** ProcessDrawData -> DrawNumber = " + drawNumber + ", DrawResult = " + drawResult + " **********");
-
 				processDrawData(drawNumber, drawResult);
 			}
 			error = 1;
@@ -72,7 +68,6 @@ public class LottoGrabbingJS extends LottoGrabbingTask {
 				changeIP();
 			} else {
 				logger.error("Error in drawing " + Market.JS.name() + " data. Error message: " + e.getMessage());
-				//sendNotifyMail("Error in drawing " + Market.JS.name() + " data","Error message: " + e.getMessage());
 				error = 1;
 			}
 		} 
@@ -82,7 +77,6 @@ public class LottoGrabbingJS extends LottoGrabbingTask {
 		List<Draw> checkResult = drawDAO.selectByDrawNumberAndMarket(Market.JS.name(), drawNumber, GameCode.K3.name());
 
 		if (!checkResult.isEmpty()) {
-			//System.out.println("Target DRAW data: " + checkResult.get(0).drawNumberLogInfo());
 			Draw draw = checkResult.get(0);
 			HashMap<String, String> httpRequestInfo = new HashMap<String, String>();
 			
@@ -93,13 +87,13 @@ public class LottoGrabbingJS extends LottoGrabbingTask {
 				httpRequestInfo.put("drawNumber", drawNumber);
 				httpRequestInfo.put("result", drawResult);
 
-				updateData(socketHttpDestination, httpRequestInfo, logger);
+				if (draw.getResult() == null || draw.getResult().length() == 0) {
+					updateData(socketHttpDestination, httpRequestInfo, logger);
+				}
 
 			} catch (Exception e) {
 				e.printStackTrace();				
-				logger.error("Error in drawing " + Market.JS.name() + " data. Error message: " + e.getMessage());
-				//sendNotifyMail("Error in drawing " + Market.JS.name() + " data","Error message: " + e.getMessage());
-					
+				logger.error("Error in drawing " + Market.JS.name() + " data. Error message: " + e.getMessage());					
 			}
 		}
 

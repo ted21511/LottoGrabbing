@@ -42,7 +42,7 @@ public class LottoGrabbingSH extends LottoGrabbingTask {
 				DATAS.add(targetTd.text().length()==0? targetTd.data():targetTd.text());
 				counter++;
 			}
-//			System.out.println(DATAS);
+			
 			String drawNumber;
 			String drawResult;
 			int idx;
@@ -50,9 +50,6 @@ public class LottoGrabbingSH extends LottoGrabbingTask {
 				drawNumber = DATAS.get(0);
 				idx = DATAS.get(1).indexOf("'");
 				drawResult = "[" + DATAS.get(1).substring(idx+1, idx+15) + "]";
-
-				//System.out.println("********** ProcessDrawData -> DrawNumber = " + drawNumber + ", DrawResult = " + drawResult + " **********");
-				//logger.info("********** ProcessDrawData -> DrawNumber = " + drawNumber + ", DrawResult = " + drawResult + " **********");
 
 				processDrawData(drawNumber, drawResult);
 				removeProcessedData();
@@ -66,7 +63,6 @@ public class LottoGrabbingSH extends LottoGrabbingTask {
 				changeIP();
 			} else {
 				logger.error("Error in drawing " + Market.SH.name() + " data. Error message: " + e.getMessage());
-				//sendNotifyMail("Error in drawing " + Market.SH.name() + " data","Error message: " + e.getMessage());
 				error = 1;
 			}
 		} 
@@ -87,12 +83,13 @@ public class LottoGrabbingSH extends LottoGrabbingTask {
 				httpRequestInfo.put("drawNumber", drawNumber);
 				httpRequestInfo.put("result", drawResult);
 
-				updateData(socketHttpDestination, httpRequestInfo, logger);
+				if (draw.getResult() == null || draw.getResult().length() == 0) {
+					updateData(socketHttpDestination, httpRequestInfo, logger);
+				}
 
 			} catch (Exception e) {
 				e.printStackTrace();			
-				logger.error("Error in drawing " + Market.SH.name() + " data. Error message: " + e.getMessage());
-				//sendNotifyMail("Error in drawing " + Market.SH.name() + " data","Error message: " + e.getMessage());				
+				logger.error("Error in drawing " + Market.SH.name() + " data. Error message: " + e.getMessage());			
 			}
 		}
 

@@ -33,8 +33,6 @@ public class LottoGrabbingGD extends LottoGrabbingTask {
 		try {
 			Pattern pattern = Pattern.compile("[0-9]*");
 			Document doc = Jsoup.connect(url).timeout(10000).get();
-//			System.out.println(doc);
-//			Document doc = Jsoup.parse(new URL(url).openStream(), "UTF-8", url);
 			Elements tablelist = doc.select("table");
 			if (tablelist.size() >= 3) {
 				Element targetTable = tablelist.get(2);
@@ -60,9 +58,6 @@ public class LottoGrabbingGD extends LottoGrabbingTask {
 					drawNumber = numberList.get(i);
 					drawResult = "[" + resultList.get(i).trim().replace("，", ",") + "]";
 	
-					//System.out.println("********** ProcessDrawData -> DrawNumber = " + drawNumber + ", DrawResult = " + drawResult + " **********");
-					//logger.info("********** ProcessDrawData -> DrawNumber = " + drawNumber + ", DrawResult = " + drawResult + " **********");
-	
 					processDrawData(drawNumber, drawResult);
 				}
 			}
@@ -75,7 +70,6 @@ public class LottoGrabbingGD extends LottoGrabbingTask {
 				changeIP();
 			} else {
 				logger.error("Error in drawing " + Market.GD.name() + " data. Error message: " + e.getMessage());
-				//sendNotifyMail("Error in drawing " + Market.GD.name() + " data","Error message: " + e.getMessage());
 			}
 		} 
 	}
@@ -84,7 +78,6 @@ public class LottoGrabbingGD extends LottoGrabbingTask {
 		List<Draw> checkResult = drawDAO.selectByDrawNumberAndMarket(Market.GD.name(), drawNumber, GameCode.HL11x5.name());
 
 		if (!checkResult.isEmpty()) {
-			//System.out.println("Target DRAW data: " + checkResult.get(0).drawNumberLogInfo());
 			Draw draw = checkResult.get(0);
 			HashMap<String, String> httpRequestInfo = new HashMap<String, String>();
 			
@@ -95,12 +88,13 @@ public class LottoGrabbingGD extends LottoGrabbingTask {
 				httpRequestInfo.put("drawNumber", drawNumber);
 				httpRequestInfo.put("result", drawResult);
 
-				updateData(socketHttpDestination, httpRequestInfo, logger);
+				if (draw.getResult() == null || draw.getResult().length() == 0) {
+					updateData(socketHttpDestination, httpRequestInfo, logger);
+				}
 
 			} catch (Exception e) {
 				e.printStackTrace();
-				logger.error("Error in drawing " + Market.GD.name() + " data. Error message: " + e.getMessage());
-				//sendNotifyMail("Error in drawing " + Market.GD.name() + " data","Error message: " + e.getMessage());				
+				logger.error("Error in drawing " + Market.GD.name() + " data. Error message: " + e.getMessage());			
 			}
 		}
 

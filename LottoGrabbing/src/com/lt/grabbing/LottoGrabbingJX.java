@@ -28,7 +28,6 @@ public class LottoGrabbingJX extends LottoGrabbingTask {
 	}
 	public void startGrabbing() {
 		try {
-//			Document doc = Jsoup.parse(new URL(url).openStream(), "UTF-8", url);
 			Document doc = Jsoup.connect(url).timeout(10000).get();
 			Elements tablelist = doc.select("table");
 			if (tablelist.size() >= 12) {
@@ -42,7 +41,6 @@ public class LottoGrabbingJX extends LottoGrabbingTask {
 						drawNumber = tdList.get(0).text().substring(0, 10);
 						drawResult = "["+tdList.get(2).text().replace(" ", ",")+"]";
 						
-						//System.out.println("********** ProcessDrawData -> DrawNumber = " + drawNumber + ", DrawResult = " + drawResult + " **********");
 						processDrawData(drawNumber, drawResult);
 						tdList.remove(0);
 						tdList.remove(0);
@@ -59,7 +57,6 @@ public class LottoGrabbingJX extends LottoGrabbingTask {
 				changeIP();
 			} else {
 				logger.error("Error in drawing " + Market.JX.name() + " data. Error message: " + e.getMessage());
-				//sendNotifyMail("Error in drawing " + Market.JX.name() + " data","Error message: " + e.getMessage());
 				error = 1;
 			}
 		} 
@@ -69,7 +66,6 @@ public class LottoGrabbingJX extends LottoGrabbingTask {
 		List<Draw> checkResult = drawDAO.selectByDrawNumberAndMarket(Market.JX.name(), drawNumber, GameCode.HL11x5.name());
 
 		if (!checkResult.isEmpty()) {
-			//System.out.println("Target DRAW data: " + checkResult.get(0).drawNumberLogInfo());
 			Draw draw = checkResult.get(0);
 			HashMap<String, String> httpRequestInfo = new HashMap<String, String>();
 			
@@ -80,12 +76,13 @@ public class LottoGrabbingJX extends LottoGrabbingTask {
 				httpRequestInfo.put("drawNumber", drawNumber);
 				httpRequestInfo.put("result", drawResult);
 
-				updateData(socketHttpDestination, httpRequestInfo, logger);
+				if (draw.getResult() == null || draw.getResult().length() == 0) {
+					updateData(socketHttpDestination, httpRequestInfo, logger);
+				}
 
 			} catch (Exception e) {
 				e.printStackTrace();				
-				logger.error("Error in drawing " + Market.JX.name() + " data. Error message: " + e.getMessage());
-				//sendNotifyMail("Error in drawing " + Market.JX.name() + " data","Error message: " + e.getMessage());			
+				logger.error("Error in drawing " + Market.JX.name() + " data. Error message: " + e.getMessage());		
 			}
 		}
 
