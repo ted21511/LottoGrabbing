@@ -16,13 +16,15 @@ public class DrawDAO {
     
     public List<Draw> getCountOfStatusL(String market, String gameCode, String date) {
     	StringBuffer checkSql = new StringBuffer();
-    	checkSql.append("Select * from draw ");
+    	checkSql.append("Select TOP (10) * from draw ");
 		checkSql.append("where draw_date = '" + date + "' ");
+		checkSql.append("and begin_time > DATEADD(HOUR,-2,GETDATE())");
 		checkSql.append("and begin_time < CURRENT_TIMESTAMP ");
 		checkSql.append("and game_code = '" + gameCode + "' ");
 		checkSql.append("and market = '" + market + "' ");
 		checkSql.append("and status = 'L' ");
 		checkSql.append("and result is NULL ");
+		checkSql.append("order by draw_id DESC ");
 		
 		return genericHibernateDao.findBySql(Draw.class, checkSql.toString());
 	}
