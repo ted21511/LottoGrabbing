@@ -59,7 +59,7 @@
 	</bean>
 
 	
-	<bean id="DrawDAO" class="com.lk.dao.DrawDAO" >
+	<bean id="DrawDAO" class="com.lt.dao.DrawDAO" >
 		<property name="genericHibernateDao" ref="genericHibernateDao" />		
 	</bean>
 	

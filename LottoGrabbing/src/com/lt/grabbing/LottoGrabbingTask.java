@@ -10,7 +10,7 @@ import org.jsoup.nodes.Document;
 import org.slf4j.Logger;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import com.lk.dao.DrawDAO;
+import com.lt.dao.DrawDAO;
 import com.lt.util.EmailNotificated;
 import com.lt.util.SmtpInfo;
 

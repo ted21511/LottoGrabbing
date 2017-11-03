@@ -1,4 +1,4 @@
-package com.lk.dao;
+package com.lt.dao;
 
 import java.util.List;
 
