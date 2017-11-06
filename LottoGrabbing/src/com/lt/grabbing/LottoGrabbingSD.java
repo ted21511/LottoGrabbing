@@ -30,13 +30,11 @@ public class LottoGrabbingSD extends LottoGrabbingTask {
 
 	public void startGrabbing() {
 		try {
-			System.out.println("********** Start SD Drawing, ISSUE_PERIOD="+ISSUE_PERIOD+"**********");
 			Document doc= Jsoup.parse(new URL(url), 10000);
 			Elements tablelist = doc.select("table");
 			if (tablelist.size() >= 15) {
 				Element targetTable = tablelist.get(14);
 				Elements tdList = targetTable.getElementsByAttributeValue("height", "20");
-				System.out.println("********** Start SD parsing **********");
 	
 				int counter = 0;
 				Element targetTd;
@@ -47,8 +45,6 @@ public class LottoGrabbingSD extends LottoGrabbingTask {
 					datas.add(targetTd.text());
 					counter++;
 				}
-	
-				System.out.println("********** SD DATAS size="+datas.size()+" **********");
 				
 				String drawNumber = "";
 				String drawResult = "";
@@ -61,7 +57,6 @@ public class LottoGrabbingSD extends LottoGrabbingTask {
 					removeProcessedData(datas);
 				}
 			}
-			System.out.println("********** End SD **********");
 			error = 1;
 		} catch (Exception e) {
 			e.printStackTrace();
