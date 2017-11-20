@@ -15,8 +15,10 @@ public enum Market {
 	XJ("XJ", "LT"),
 	// K3
 	JS("JS", "K3"),
-	AH("AH", "K3");
-
+	AH("AH", "K3"),
+	// PK10
+    BJ("BJ", "PK10");
+    
     private final String marketName;
     private final String gameCode;
 

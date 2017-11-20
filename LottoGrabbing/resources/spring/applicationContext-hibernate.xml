@@ -106,6 +106,10 @@
 		<property name="url" value="${xj.url}" />
 	</bean>
 	
+	<bean id="LottoGrabbingBJ" class="com.lt.grabbing.LottoGrabbingBJ" >
+		<property name="url" value="${bj.url}" />
+	</bean>
+	
 	<bean id="LottoGrabbingAH" class="com.lt.grabbing.LottoGrabbingAH" >
 		<property name="url" value="${ah.url}" />
 		<property name="ISSUE_PERIOD" value="${issue.period}" />

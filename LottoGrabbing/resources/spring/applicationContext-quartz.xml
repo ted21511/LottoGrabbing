@@ -64,6 +64,13 @@
 		<property name="targetMethod" value="startGrabbing" />
 		<property name="concurrent" value="false" />
 	</bean>
+	
+	<bean id="runLottoGrabbingBJ"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="LottoGrabbingBJ" />
+		<property name="targetMethod" value="startGrabbing" />
+		<property name="concurrent" value="false" />
+	</bean>
 
  	<bean id="runLottoGrabbingCheck"
  		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
@@ -111,7 +118,7 @@
 	<bean id="cronTriggerXJ" class="org.springframework.scheduling.quartz.CronTriggerBean">
 		<property name="jobDetail" ref="runLottoGrabbingXJ" />
 		<property name="cronExpression" value="0 0/1 * * * ?" />
-
+		
 	</bean>
 
 	<bean id="cronTriggerAH" class="org.springframework.scheduling.quartz.CronTriggerBean">
@@ -122,6 +129,12 @@
 
 	<bean id="cronTriggerJS" class="org.springframework.scheduling.quartz.CronTriggerBean">
 		<property name="jobDetail" ref="runLottoGrabbingJS" />
+		<property name="cronExpression" value="0 0/1 * * * ?" />
+
+	</bean>
+
+    <bean id="cronTriggerBJ" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="runLottoGrabbingBJ" />
 		<property name="cronExpression" value="0 0/1 * * * ?" />
 
 	</bean>
@@ -145,6 +158,7 @@
 				<ref bean="cronTriggerSD" />
 				<ref bean="cronTriggerJS" />
 				<ref bean="cronTriggerAH" />
+				<ref bean="cronTriggerBJ" />
 				<ref bean="cronTriggerCheck" />
 			</list>
 		</property>
