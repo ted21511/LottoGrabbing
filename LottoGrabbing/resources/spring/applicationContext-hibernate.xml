@@ -107,7 +107,7 @@
 	</bean>
 	
 	<bean id="LottoGrabbingBJ" class="com.lt.grabbing.LottoGrabbingBJ" >
-		<property name="url" value="${bj.url}" />
+		<property name="url" value="${lt.bj.url}" />
 	</bean>
 	
 	<bean id="LottoGrabbingAH" class="com.lt.grabbing.LottoGrabbingAH" >
