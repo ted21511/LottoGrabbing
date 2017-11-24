@@ -77,6 +77,7 @@ public class LottoGrabbingBJ extends LottoGrabbingTask {
 							newAward = awardMap.get(mappingNumber);
 							if (newAward != null) {
 								drawDAO.updateDrawResult(GameCode.PK10.name(), Market.BJ.name(), mappingNumber, newAward);
+								flag = true;
 							}
 						} else {
 							if (mappingNumber.equals(newNumber) && dList.getResult() == null) {
