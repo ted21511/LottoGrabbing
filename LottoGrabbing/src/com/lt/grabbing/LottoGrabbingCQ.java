@@ -58,6 +58,7 @@ public class LottoGrabbingCQ extends LottoGrabbingTask {
 						if (tmpnewAward != null){
 						newAward = tmpnewAward.replace("-", "");
 						drawDAO.updateDrawResult(GameCode.LT.name(), Market.CQ.name(), mappingNumber, newAward);
+						flag = true;
 						}
 					} else {
 
