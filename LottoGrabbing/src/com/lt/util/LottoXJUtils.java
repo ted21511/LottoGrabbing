@@ -1,6 +1,7 @@
 package com.lt.util;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -20,14 +21,32 @@ public class LottoXJUtils {
 	}
 
 	public static Element getNowNumber(Document xmlDoc) {
-
-		Element newList = xmlDoc.getElementById("pagedata").select("tr").last();
-				
+			
+		Calendar now = Calendar.getInstance();
+		int checkTime = now.get(Calendar.HOUR_OF_DAY);		
+		if(checkTime < 10){
+			now.add(Calendar.DAY_OF_MONTH, -1);
+		}
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+		String dateTime = dateFormat.format(now.getTime());
+ 
+		Elements newLists = new Elements();
+		Elements tmpnewList = xmlDoc.getElementById("pagedata").select("tr");
+		for(Element tmp : tmpnewList){
+			
+			String mappingDate = tmp.select(".z_bg_05").get(1).text().substring(0,8);
+			if(dateTime.equals(mappingDate)){
+				newLists.add(tmp);
+			}
+		}
+		Element newList = newLists.last();
+		if(!newLists.isEmpty()){
 		String newNumber  = newList.select(".z_bg_05").get(1).text();
 		String award = newList.select(".z_bg_13").text();
-				
+		
 		System.out.println("XJ最新彩期:" + newNumber + " | " + award);
-
+		}
+		
 		return newList;
 	}
 

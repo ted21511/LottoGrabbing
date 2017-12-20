@@ -135,7 +135,7 @@
 
     <bean id="cronTriggerBJ" class="org.springframework.scheduling.quartz.CronTriggerBean">
 		<property name="jobDetail" ref="runLottoGrabbingBJ" />
-		<property name="cronExpression" value="0 0/1 * * * ?" />
+		<property name="cronExpression" value="0/30 * * * * ?" />
 
 	</bean>
 
