@@ -30,7 +30,7 @@ public class LottoGrabbingTask extends Thread {
 	public void loadConfiguration() {
 		try {
 			
-			String[] config= { "classpath:spring/applicationContext*.xml","classpath:spring/applicationContext*.xml" };
+			String[] config= { "classpath:spring/applicationContext*.xml"};
 			System.out.println("server initializing... xml loading...");
 			ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext();
 			context.setConfigLocations(config);

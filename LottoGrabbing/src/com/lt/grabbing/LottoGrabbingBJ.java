@@ -8,6 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,22 +22,27 @@ import com.lt.util.UseIPInfo;
 public class LottoGrabbingBJ extends LottoGrabbingTask {
 
 	private static final Logger logger = LoggerFactory.getLogger(LottoGrabbingBJ.class);
-	private String url; //= "http://www.bwlc.net/bulletin/trax.html?page=";
+	private String url; // = "http://www.bwlc.net/bulletin/trax.html?page=";
 	private int page = 1;
 	private String ipUrl = "http://www.xdaili.cn/ipagent//freeip/getFreeIps?page=1&rows=10";
 	private String checkipUrl = "http://www.xdaili.cn/ipagent//checkIp/ipList?";
+	private String subCheckipUrl = "http://cn-proxy.com";
 	private static boolean flag = true;
 	int error = 1;
 
-//	public static void main(String[] args) {
-//		LottoGrabbingBJ task = new LottoGrabbingBJ();
-//		task.startGrabbing();
-//	}
+	// public static void main(String[] args) {
+	// LottoGrabbingBJ task = new LottoGrabbingBJ();
+	// task.startGrabbing();
+	// }
 
 	public void startGrabbing() {
 
 		System.out.println("----------Lotto BJ start----------");
-		List<UseIPInfo> useIPList = checkCNIP();
+		List<UseIPInfo> useIPList = new ArrayList<UseIPInfo>();
+		useIPList = checkCNIP();
+		if (useIPList.isEmpty() || useIPList.size() < 3) {
+			useIPList = subCheckCNIP(useIPList);
+		}	
 		startMain(useIPList);
 		System.out.println("----------Lotto BJ end----------");
 
@@ -45,7 +51,7 @@ public class LottoGrabbingBJ extends LottoGrabbingTask {
 	public void startMain(List<UseIPInfo> useIPList) {
 		try {
 			if (!useIPList.isEmpty()) {
-				
+
 				changeIP(useIPList, error);
 				String pageUrl = url + page;
 				Document xmlDoc = Jsoup.connect(pageUrl).timeout(5000).post();
@@ -58,8 +64,7 @@ public class LottoGrabbingBJ extends LottoGrabbingTask {
 				List<Draw> list = null;
 				List<Draw> drawlist = null;
 				list = drawDAO.getDrawNum(GameCode.PK10.name(), Market.BJ.name(), newNumber);
-				drawlist = drawDAO.getDrawNumList(GameCode.PK10.name(), Market.BJ.name(), startNumber,
-						newNumber);
+				drawlist = drawDAO.getDrawNumList(GameCode.PK10.name(), Market.BJ.name(), startNumber, newNumber);
 				HashMap<String, String> awardMap = null;
 				HashMap<String, String> httpRequestInfo = null;
 				String newAward = null;
@@ -69,19 +74,20 @@ public class LottoGrabbingBJ extends LottoGrabbingTask {
 					awardMap = supplyNumber(xmlDoc, url, page, lastNumber);
 					list = drawlist;
 				}
-				
+
 				if (!list.isEmpty()) {
 					for (Draw dList : list) {
 						String mappingNumber = dList.getNumber();
 						if (awardMap != null) {
 							newAward = awardMap.get(mappingNumber);
 							if (newAward != null) {
-								drawDAO.updateDrawResult(GameCode.PK10.name(), Market.BJ.name(), mappingNumber, newAward);
+								drawDAO.updateDrawResult(GameCode.PK10.name(), Market.BJ.name(), mappingNumber,
+										newAward);
 								flag = true;
 							}
 						} else {
 							if (mappingNumber.equals(newNumber) && dList.getResult() == null) {
-								newAward = "["+newlist.get(1).text()+"]";
+								newAward = "[" + newlist.get(1).text() + "]";
 
 								httpRequestInfo = new HashMap<String, String>();
 								httpRequestInfo.put("drawId", "" + dList.getId());
@@ -96,10 +102,11 @@ public class LottoGrabbingBJ extends LottoGrabbingTask {
 						}
 					}
 				}
-	
+
 			} else {
 				System.out.println("目前無ip可以使用orIP回應速度過慢");
 			}
+			System.getProperties().clear();
 			error = 1;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -137,7 +144,7 @@ public class LottoGrabbingBJ extends LottoGrabbingTask {
 		List<UseIPInfo> ipList = new ArrayList<UseIPInfo>();
 		String checkIPUrl = checkipUrl;
 
-		try {
+		try {		
 			Document doc = Jsoup.connect(ipUrl).ignoreContentType(true).timeout(5000).get();
 			String json = doc.select("body").text();
 			String checkIPJson = LottoBJUtils.splitJson(json);
@@ -169,7 +176,7 @@ public class LottoGrabbingBJ extends LottoGrabbingTask {
 						useIPInfo.setIp(tmpIPJson.get("ip").toString());
 						useIPInfo.setPort(tmpIPJson.get("port").toString());
 						useIPInfo.setTime(time);
-						ipList.add(useIPInfo);
+						ipList.add(useIPInfo);					
 					}
 				}
 			}
@@ -177,6 +184,39 @@ public class LottoGrabbingBJ extends LottoGrabbingTask {
 			e.printStackTrace();
 		}
 		return ipList;
+	}
+
+	public List<UseIPInfo> subCheckCNIP(List<UseIPInfo> useIPList) {
+
+		List<UseIPInfo> ipList = useIPList;
+		
+		try {
+			
+			Document doc = Jsoup.connect(subCheckipUrl).timeout(5000).post();
+			Elements allIP = doc.select(".sortable").select("tbody").select("tr");
+			for (Element checkIP : allIP) {
+				String checkPort = checkIP.select("td").get(1).text();
+				if (checkPort.equals("80")) {
+					String[] speed = checkIP.select(".bar").attr("style").split("\\s|;|%");
+					int resSpeed = Integer.parseInt(speed[1]);
+					if (resSpeed >= 75) {
+						UseIPInfo useIPInfo = new UseIPInfo();
+						useIPInfo.setIp(checkIP.select("tr").select("td").get(0).text());
+						useIPInfo.setPort("80");
+						ipList.add(useIPInfo);
+						if (ipList.size() > 4) {
+							return ipList;
+						}
+					}
+				}
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ipList;
+		}
+		return ipList;
+		
 	}
 
 	public HashMap<String, String> supplyNumber(Document xmlDoc, String url, int page, String lastNumber)
@@ -198,7 +238,7 @@ public class LottoGrabbingBJ extends LottoGrabbingTask {
 		}
 		return awardMap;
 	}
-	
+
 	public void setUrl(String url) {
 		this.url = url;
 	}
