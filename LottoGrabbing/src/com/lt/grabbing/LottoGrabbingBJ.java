@@ -205,7 +205,7 @@ public class LottoGrabbingBJ extends LottoGrabbingTask {
 						useIPInfo.setIp(checkIP.select("tr").select("td").get(0).text());
 						useIPInfo.setPort("80");
 						ipList.add(useIPInfo);
-						if (ipList.size() > 2) {
+						if (ipList.size() > 4) {
 							return ipList;
 						}
 					}
