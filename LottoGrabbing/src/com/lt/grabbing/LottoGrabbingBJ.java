@@ -106,7 +106,8 @@ public class LottoGrabbingBJ extends LottoGrabbingTask {
 			} else {
 				System.out.println("目前無ip可以使用orIP回應速度過慢");
 			}
-			System.getProperties().clear();
+			System.getProperties().remove("http.proxyHost");
+			System.getProperties().remove("http.proxyPort");
 			error = 1;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -204,7 +205,7 @@ public class LottoGrabbingBJ extends LottoGrabbingTask {
 						useIPInfo.setIp(checkIP.select("tr").select("td").get(0).text());
 						useIPInfo.setPort("80");
 						ipList.add(useIPInfo);
-						if (ipList.size() > 4) {
+						if (ipList.size() > 2) {
 							return ipList;
 						}
 					}
