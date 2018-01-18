@@ -18,6 +18,7 @@ import com.lt.util.GameCode;
 import com.lt.util.LottoBJUtils;
 import com.lt.util.Market;
 import com.lt.util.UseIPInfo;
+import com.lt.util.CommonUnits;
 
 public class LottoGrabbingBJ extends LottoGrabbingTask {
 
@@ -38,17 +39,18 @@ public class LottoGrabbingBJ extends LottoGrabbingTask {
 	public void startGrabbing() {
 
 		System.out.println("----------Lotto BJ start----------");
+		String resultTime = CommonUnits.getNowDateTime();
 		List<UseIPInfo> useIPList = new ArrayList<UseIPInfo>();
-		useIPList = checkCNIP();
+		useIPList = checkCNIP(resultTime);
 		if (useIPList.isEmpty() || useIPList.size() < 3) {
-			useIPList = subCheckCNIP(useIPList);
+			useIPList = subCheckCNIP(useIPList,resultTime);
 		}	
-		startMain(useIPList);
+		startMain(useIPList,resultTime);
 		System.out.println("----------Lotto BJ end----------");
 
 	}
 
-	public void startMain(List<UseIPInfo> useIPList) {
+	public void startMain(List<UseIPInfo> useIPList,String resultTime) {
 		try {
 			if (!useIPList.isEmpty()) {
 
@@ -56,7 +58,7 @@ public class LottoGrabbingBJ extends LottoGrabbingTask {
 				String pageUrl = url + page;
 				Document xmlDoc = Jsoup.connect(pageUrl).timeout(5000).post();
 				Elements newlist = LottoBJUtils.getNowNumber(xmlDoc);
-				String resultTime = LottoBJUtils.getNowDateTime();
+				
 
 				String newNumber = newlist.get(0).text();
 				List<Draw> getStartNB = drawDAO.getStartNumber(GameCode.PK10.name(), Market.BJ.name());
@@ -98,6 +100,7 @@ public class LottoGrabbingBJ extends LottoGrabbingTask {
 								httpRequestInfo.put("result", newAward);
 
 								updateData(socketHttpDestination, httpRequestInfo, logger);
+								drawDAO.insertLog(httpRequestInfo,0);
 							}
 						}
 					}
@@ -105,6 +108,7 @@ public class LottoGrabbingBJ extends LottoGrabbingTask {
 
 			} else {
 				System.out.println("目前無ip可以使用orIP回應速度過慢");
+				drawDAO.insertErrorLog(GameCode.PK10.name(), Market.BJ.name(), resultTime, 4);
 			}
 			System.getProperties().remove("http.proxyHost");
 			System.getProperties().remove("http.proxyPort");
@@ -114,9 +118,10 @@ public class LottoGrabbingBJ extends LottoGrabbingTask {
 			if (error <= 3) {
 				System.out.println("BJ錯誤次數:" + error);
 				error++;
-				startMain(useIPList);
+				startMain(useIPList,resultTime);
 			} else {
 				logger.error("Error in drawing " + Market.BJ.name() + " data. Error message: " + e.getMessage());
+				drawDAO.insertErrorLog(GameCode.PK10.name(), Market.BJ.name(), resultTime, 1);
 				error = 1;
 			}
 		}
@@ -140,7 +145,7 @@ public class LottoGrabbingBJ extends LottoGrabbingTask {
 
 	}
 
-	public List<UseIPInfo> checkCNIP() {
+	public List<UseIPInfo> checkCNIP(String resultTime) {
 
 		List<UseIPInfo> ipList = new ArrayList<UseIPInfo>();
 		String checkIPUrl = checkipUrl;
@@ -183,11 +188,12 @@ public class LottoGrabbingBJ extends LottoGrabbingTask {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			drawDAO.insertErrorLog(GameCode.PK10.name(), Market.BJ.name(), resultTime, 3);
 		}
 		return ipList;
 	}
 
-	public List<UseIPInfo> subCheckCNIP(List<UseIPInfo> useIPList) {
+	public List<UseIPInfo> subCheckCNIP(List<UseIPInfo> useIPList,String resultTime) {
 
 		List<UseIPInfo> ipList = useIPList;
 		
@@ -214,7 +220,7 @@ public class LottoGrabbingBJ extends LottoGrabbingTask {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			return ipList;
+			drawDAO.insertErrorLog(GameCode.PK10.name(), Market.BJ.name(), resultTime, 3);
 		}
 		return ipList;
 		

@@ -14,6 +14,7 @@ import com.ct.lk.domain.Draw;
 import com.lt.util.GameCode;
 import com.lt.util.LottoXJUtils;
 import com.lt.util.Market;
+import com.lt.util.CommonUnits;
 
 public class LottoGrabbingXJ extends LottoGrabbingTask {
 
@@ -26,10 +27,10 @@ public class LottoGrabbingXJ extends LottoGrabbingTask {
 	// }
 
 	public void startGrabbing() {
+		String resultTime = CommonUnits.getNowDateTime();
 		try {
 			System.out.println("----------lotto XJ start----------");
 			Document xmlDoc = Jsoup.connect(url).timeout(10000).post();
-			String resultTime = LottoXJUtils.getNowDateTime();
 			List<Draw> list = null;
 			List<Draw> drawlist = null;
 			Element newList = LottoXJUtils.getNowNumber(xmlDoc);
@@ -72,6 +73,7 @@ public class LottoGrabbingXJ extends LottoGrabbingTask {
 								httpRequestInfo.put("result", newAward);
 
 								updateData(socketHttpDestination, httpRequestInfo, logger);
+								drawDAO.insertLog(httpRequestInfo,0);
 							}
 						}
 
@@ -91,8 +93,7 @@ public class LottoGrabbingXJ extends LottoGrabbingTask {
 				changeIP();
 			} else {
 				logger.error("Error in drawing " + Market.XJ.name() + " data. Error message: " + e.getMessage());
-				// sendNotifyMail("Error in drawing " + Market.XJ.name() + "
-				// data", "Error message: " + e.getMessage());
+				drawDAO.insertErrorLog(GameCode.LT.name(), Market.XJ.name(), resultTime, 1);
 				error = 1;
 			}
 

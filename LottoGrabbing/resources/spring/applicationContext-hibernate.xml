@@ -71,9 +71,7 @@
 	</bean>
 	
 	<bean id="LottoGrabbingJX" class="com.lt.grabbing.LottoGrabbingJX" >
-		<property name="url" value="${jx.url}" />
-		<property name="ISSUE_PERIOD" value="${issue.period}" />	
-		
+		<property name="url" value="${jx.url}" />	
 	</bean>
 	
 	<bean id="LottoGrabbingSH" class="com.lt.grabbing.LottoGrabbingSH" >
@@ -119,8 +117,6 @@
 	
 	<bean id="LottoGrabbingJS" class="com.lt.grabbing.LottoGrabbingJS" >
 		<property name="url" value="${js.url}" />
-		<property name="ISSUE_PERIOD" value="${issue.period}" />
-		
 	</bean>
 	
 	<bean id="LottoGrabbingCheck" class="com.lt.grabbing.LottoGrabbingCheck" >

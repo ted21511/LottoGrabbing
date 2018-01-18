@@ -1,8 +1,5 @@
 package com.lt.util;
 
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 
 import org.jsoup.nodes.Document;
@@ -36,14 +33,7 @@ public class LottoBJUtils {
 		return newList;
 	}
 
-	public static String getNowDateTime() {
-
-		Date now = new Date();
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-		String dateTime = dateFormat.format(now);
-
-		return dateTime;
-	}
+	
 
 	public static HashMap<String, String> Crawl(Document xmlDoc, String lastNumber) {
 

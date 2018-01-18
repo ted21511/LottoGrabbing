@@ -15,6 +15,7 @@ import com.ct.lk.domain.Draw;
 import com.lt.util.GameCode;
 import com.lt.util.LottoCQUtils;
 import com.lt.util.Market;
+import com.lt.util.CommonUnits;
 
 public class LottoGrabbingCQ extends LottoGrabbingTask {
 
@@ -29,10 +30,10 @@ public class LottoGrabbingCQ extends LottoGrabbingTask {
 	// }
 	
 	public void startGrabbing() {
+		String resultTime = CommonUnits.getNowDateTime();
 		try {
 			System.out.println("----------lotto CQ start----------");
 			Document xmlDoc = Jsoup.parse(new URL(url), 10000);
-			String resultTime = LottoCQUtils.getNowDateTime();
 			List<Draw> list = null;
 			List<Draw> drawlist = null;
 			Elements newList = LottoCQUtils.getNowNumber(xmlDoc);
@@ -64,7 +65,7 @@ public class LottoGrabbingCQ extends LottoGrabbingTask {
 
 						if (mappingNumber.equals(newNumber) && dList.getResult() == null) {
 							newAward = "[" + newList.get(1).text().replace("-", "") + "]";
-
+							
 							httpRequestInfo = new HashMap<String, String>();
 							httpRequestInfo.put("drawId", "" + dList.getId());
 							httpRequestInfo.put("gameCode", GameCode.LT.name());
@@ -74,11 +75,12 @@ public class LottoGrabbingCQ extends LottoGrabbingTask {
 							httpRequestInfo.put("result", newAward);
 
 							updateData(socketHttpDestination, httpRequestInfo, logger);
+							drawDAO.insertLog(httpRequestInfo,0);
 						}
 					}
 				}
 			}
-
+            
 			System.out.println("----------lotto CQ end----------");
 			error = 1;
 		} catch (Exception e) {
@@ -89,7 +91,7 @@ public class LottoGrabbingCQ extends LottoGrabbingTask {
 				changeIP();
 			} else {
 				logger.error("Error in drawing " + Market.CQ.name() + " data. Error message: " + e.getMessage());
-				//sendNotifyMail("Error in drawing " + Market.CQ.name() + " data", "Error message: " + e.getMessage());
+				drawDAO.insertErrorLog(GameCode.LT.name(), Market.CQ.name(), resultTime, 1);
 				error = 1;
 			}
 		}

@@ -1,55 +1,84 @@
 package com.lt.grabbing;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.ct.lk.domain.Draw;
+import com.lt.util.CommonUnits;
 import com.lt.util.GameCode;
+import com.lt.util.LottoJXUtils;
 import com.lt.util.Market;
 
 public class LottoGrabbingJX extends LottoGrabbingTask {
-	private int ISSUE_PERIOD;// = 10;
+	
+	private static final Logger logger = LoggerFactory.getLogger(LottoGrabbingJX.class);
 	private String url;// = "https://www.ydniu.com/open/70.html";
 	int error = 1;
 
-	private static final Logger logger = LoggerFactory.getLogger(LottoGrabbingGD.class);
-
-
-	public static void main(String[] args) {
-		LottoGrabbingJX task = new LottoGrabbingJX();
-		task.startGrabbing();
-	}
-	public void startGrabbing() {
-		try {
-			Document doc = Jsoup.connect(url).timeout(10000).get();
-			Elements tablelist = doc.select("table");
-			if (tablelist.size() >= 12) {
-				Element targetTable = tablelist.get(11);
-				Elements tdList = targetTable.select("td");
+//	public static void main(String[] args) {
+//		LottoGrabbingJX task = new LottoGrabbingJX();
+//		task.startGrabbing();
+//	}
 	
-				String drawNumber;
-				String drawResult;
-				if (tdList.size() > 0) {
-					for (int i=0 ; i<ISSUE_PERIOD ; i++) {
-						drawNumber = tdList.get(0).text().substring(0, 10);
-						drawResult = "["+tdList.get(2).text().replace(" ", ",")+"]";
-						
-						processDrawData(drawNumber, drawResult);
-						tdList.remove(0);
-						tdList.remove(0);
-						tdList.remove(0);
-					}
-				}
+	public void startGrabbing() {
+		String resultTime = CommonUnits.getNowDateTime();
+		try {
+			System.out.println("----------lotto JX start----------");
+			Document xmlDoc = Jsoup.connect(url).timeout(10000).post();
+			List<Draw> list = null;
+			List<Draw> drawlist = null;
+			Element newList = LottoJXUtils.getNowNumber(xmlDoc);
+			String newNumber = resultTime.substring(0, 2) + newList.select("td").get(1).text();
+			String startNumber = newNumber.substring(0, 8) + "01";
+			list = drawDAO.getDrawNum(GameCode.HL11x5.name(), Market.JX.name(), newNumber);
+			drawlist = drawDAO.getDrawNumList(GameCode.HL11x5.name(), Market.JX.name(), startNumber, newNumber);
+			HashMap<String, String> awardMap = null;
+			HashMap<String, String> httpRequestInfo = null;
+			String newAward = null;
+			
+			if (list.isEmpty() && !drawlist.isEmpty()) {
+				String lastNumber = drawlist.get(drawlist.size() - 1).getNumber();
+				awardMap = supplyNumber(xmlDoc, lastNumber);
+				list = drawlist;
 			}
+			
+			if (!list.isEmpty()) {
+				for (Draw dList : list) {
+					String mappingNumber = dList.getNumber();
+					if (awardMap != null) {
+						 newAward = awardMap.get(mappingNumber.substring(2));
+						 if (newAward != null){
+							 drawDAO.updateDrawResult(GameCode.HL11x5.name(), Market.JX.name(), mappingNumber, newAward);
+						 }						
+					}else {
+						if (mappingNumber.equals(newNumber) && dList.getResult() == null) {
+							newAward = "[" + newList.select(".kj_hm").text().replace(" ", ",") + "]";
+							
+							httpRequestInfo = new HashMap<String, String>();
+							httpRequestInfo.put("drawId", "" + dList.getId());
+							httpRequestInfo.put("gameCode", GameCode.HL11x5.name());
+							httpRequestInfo.put("market", Market.JX.name());
+							httpRequestInfo.put("drawNumber", mappingNumber);
+							httpRequestInfo.put("drawResultTime", resultTime);
+							httpRequestInfo.put("result", newAward);
+
+							updateData(socketHttpDestination, httpRequestInfo, logger);
+							drawDAO.insertLog(httpRequestInfo,0);
+						}
+					}
+				}				
+			}
+			
+			System.out.println("----------lotto JX end----------");
 			error = 1;
-		} catch (Exception e) {
+		}catch (Exception e) {
 			e.printStackTrace();
 			if (error <= 3) {
 				System.out.println("JX錯誤次數:" + error);
@@ -57,41 +86,21 @@ public class LottoGrabbingJX extends LottoGrabbingTask {
 				changeIP();
 			} else {
 				logger.error("Error in drawing " + Market.JX.name() + " data. Error message: " + e.getMessage());
+				drawDAO.insertErrorLog(GameCode.HL11x5.name(), Market.JX.name(), resultTime, 1);
 				error = 1;
 			}
-		} 
-	}
-
-	private void processDrawData(String drawNumber, String drawResult) {
-		List<Draw> checkResult = drawDAO.selectByDrawNumberAndMarket(Market.JX.name(), drawNumber, GameCode.HL11x5.name());
-
-		if (!checkResult.isEmpty()) {
-			Draw draw = checkResult.get(0);
-			HashMap<String, String> httpRequestInfo = new HashMap<String, String>();
-			
-			try {				
-				httpRequestInfo.put("drawId", "" + draw.getId());
-				httpRequestInfo.put("gameCode", GameCode.HL11x5.name());
-				httpRequestInfo.put("market", Market.JX.name());
-				httpRequestInfo.put("drawNumber", drawNumber);
-				httpRequestInfo.put("result", drawResult);
-
-				if (draw.getResult() == null || draw.getResult().length() == 0) {
-					updateData(socketHttpDestination, httpRequestInfo, logger);
-				}
-
-			} catch (Exception e) {
-				e.printStackTrace();				
-				logger.error("Error in drawing " + Market.JX.name() + " data. Error message: " + e.getMessage());		
-			}
 		}
-
 	}
-
-	public void setISSUE_PERIOD(int ISSUE_PERIOD) {
-		this.ISSUE_PERIOD = ISSUE_PERIOD;
+	
+	public HashMap<String, String> supplyNumber(Document xmlDoc, String lastNumber) throws IOException {
+		
+		HashMap<String, String> awardMap = new HashMap<String, String>();
+		
+		awardMap = LottoJXUtils.Crawl(xmlDoc, lastNumber);
+		
+		return awardMap;
 	}
-
+	
 	public void setUrl(String url) {
 		this.url = url;
 	}

@@ -1,7 +1,5 @@
 package com.lt.util;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 
 import org.jsoup.nodes.Document;
@@ -10,14 +8,6 @@ import org.jsoup.select.Elements;
 
 public class LottoTJUtils {
 
-	public static String getNowDateTime() {
-
-		Date now = new Date();
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-		String dateTime = dateFormat.format(now);
-
-		return dateTime;
-	}
 
 	public static Element getNowNumber(Document xmlDoc) {
 		

@@ -1,10 +1,12 @@
 package com.lt.dao;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.framework.support.hibernate.GenericHibernateDao;
 
 import com.ct.lk.domain.Draw;
+import com.lt.util.GameCode;
 
 public class DrawDAO {
 	
@@ -66,5 +68,17 @@ public class DrawDAO {
 				+ "'and draw_date= CONVERT(char(10), getdate(), 20) order by draw_id";
 		List<Draw> drawlist = genericHibernateDao.findBySql(Draw.class, sql);
 		return drawlist;
+	}
+    
+    public void insertLog(HashMap<String, String> log,int msgCode) {   
+    	String sql = "INSERT INTO grabber_log ([game_code], [market], [draw_number], [result_time], [result], [message_code]) VALUES "
+    			+ "('"+log.get("gameCode")+"','"+log.get("market")+"','"+log.get("drawNumber")+"','"+log.get("drawResultTime")+"','"+log.get("result")+"',"+msgCode+")";
+    	genericHibernateDao.executeSql(sql);
+	}
+    
+    public void insertErrorLog(String gameCode, String market,String resultTime,int msgCode) {   
+    	String sql = "INSERT INTO grabber_log ([game_code], [market], [result_time], [message_code]) VALUES "
+    			+ "('"+gameCode+"','"+market+"','"+resultTime+"',"+msgCode+")";
+    	genericHibernateDao.executeSql(sql);
 	}
 }

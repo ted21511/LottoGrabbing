@@ -12,6 +12,8 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.lt.dao.DrawDAO;
 import com.lt.util.EmailNotificated;
+import com.lt.util.GameCode;
+import com.lt.util.Market;
 import com.lt.util.SmtpInfo;
 
 public class LottoGrabbingTask extends Thread {
@@ -76,9 +78,7 @@ public class LottoGrabbingTask extends Thread {
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("Error in posting data. Error message: " + e.getMessage());
-			// sendNotifyMail("Error in posting data", "Error message: " +
-			// e.getMessage());
-
+			drawDAO.insertLog(httpRequestInfo, 2);
 		}
 
 	}

@@ -15,6 +15,7 @@ import com.lt.util.GameCode;
 import com.lt.util.HtmlUnit;
 import com.lt.util.LottoTJUtils;
 import com.lt.util.Market;
+import com.lt.util.CommonUnits;
 
 public class LottoGrabbingTJ extends LottoGrabbingTask {
 
@@ -27,7 +28,7 @@ public class LottoGrabbingTJ extends LottoGrabbingTask {
 	// }
 
 	public void startGrabbing() {
-
+		String resultTime = CommonUnits.getNowDateTime();
 		try {
 			System.out.println("----------lotto TJ start----------");
 //			Document doc = null;
@@ -39,8 +40,6 @@ public class LottoGrabbingTJ extends LottoGrabbingTask {
 //			}
 
 			Document doc = error > 1 ? HtmlUnit.changeIPStart(url, proxyHost, 80) : HtmlUnit.start(url);
-			 
-			String resultTime = LottoTJUtils.getNowDateTime();
 			List<Draw> list = null;
 			List<Draw> drawlist = null;
 			Element newList = LottoTJUtils.getNowNumber(doc);
@@ -87,6 +86,7 @@ public class LottoGrabbingTJ extends LottoGrabbingTask {
 							httpRequestInfo.put("result", newAward);
 
 							updateData(socketHttpDestination, httpRequestInfo, logger);
+							drawDAO.insertLog(httpRequestInfo,0);
 						}
 					}
 
@@ -103,7 +103,7 @@ public class LottoGrabbingTJ extends LottoGrabbingTask {
 				startGrabbing();
 			} else {
 				logger.error("Error in drawing " + Market.TJ.name() + " data. Error message: " + e.getMessage());
-				//sendNotifyMail("Error in drawing " + Market.TJ.name() + " data", "Error message: " + e.getMessage());
+				drawDAO.insertErrorLog(GameCode.LT.name(), Market.TJ.name(), resultTime, 1);
 				error = 1;
 			}
 		}

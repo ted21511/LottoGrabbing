@@ -29,15 +29,6 @@ public class LottoCQUtils {
 	   return nowdate;
 	}
 	
-	public static String getNowDateTime() {
-		
-		Date now = new Date();
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss"); 
-		String dateTime = dateFormat.format(now); 
-	 	
-		return dateTime;
-	}
-	
 	public static Document postNext(Document xmlDoc,String url) throws IOException {
 		
 		String viewstate = xmlDoc.select("#__VIEWSTATE").val();

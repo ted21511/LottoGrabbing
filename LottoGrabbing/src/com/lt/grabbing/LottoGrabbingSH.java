@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.ct.lk.domain.Draw;
+import com.lt.util.CommonUnits;
 import com.lt.util.GameCode;
 import com.lt.util.Market;
 
@@ -30,7 +31,9 @@ public class LottoGrabbingSH extends LottoGrabbingTask {
 		task.startGrabbing();
 	}
 	public void startGrabbing() {
+		String resultTime = CommonUnits.getNowDateTime();
 		try {
+			System.out.println("----------lotto SH start----------");
 			Document doc = Jsoup.connect(url).timeout(10000).get();
 			Elements tdList = doc.select("td");
 			
@@ -51,9 +54,10 @@ public class LottoGrabbingSH extends LottoGrabbingTask {
 				idx = DATAS.get(1).indexOf("'");
 				drawResult = "[" + DATAS.get(1).substring(idx+1, idx+15) + "]";
 
-				processDrawData(drawNumber, drawResult);
+				processDrawData(drawNumber, drawResult, resultTime);
 				removeProcessedData();
 			}
+			System.out.println("----------lotto SH end----------");
 			error = 1;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -63,34 +67,31 @@ public class LottoGrabbingSH extends LottoGrabbingTask {
 				changeIP();
 			} else {
 				logger.error("Error in drawing " + Market.SH.name() + " data. Error message: " + e.getMessage());
+				drawDAO.insertErrorLog(GameCode.HL11x5.name(), Market.SH.name(), resultTime, 1);
 				error = 1;
 			}
 		} 
 	}
 
-	private void processDrawData(String drawNumber, String drawResult) {
+	private void processDrawData(String drawNumber, String drawResult, String resultTime) {
 		List<Draw> checkResult = drawDAO.selectByDrawNumberAndMarket(Market.SH.name(), drawNumber, GameCode.HL11x5.name());
 
 		if (!checkResult.isEmpty()) {
 			//System.out.println("Target DRAW data: " + checkResult.get(0).drawNumberLogInfo());
 			Draw draw = checkResult.get(0);
 			HashMap<String, String> httpRequestInfo = new HashMap<String, String>();
-			
-			try {				
+						
 				httpRequestInfo.put("drawId", "" + draw.getId());
 				httpRequestInfo.put("gameCode", GameCode.HL11x5.name());
 				httpRequestInfo.put("market", Market.SH.name());
 				httpRequestInfo.put("drawNumber", drawNumber);
+				httpRequestInfo.put("drawResultTime", resultTime);
 				httpRequestInfo.put("result", drawResult);
 
 				if (draw.getResult() == null || draw.getResult().length() == 0) {
 					updateData(socketHttpDestination, httpRequestInfo, logger);
+					drawDAO.insertLog(httpRequestInfo,0);
 				}
-
-			} catch (Exception e) {
-				e.printStackTrace();			
-				logger.error("Error in drawing " + Market.SH.name() + " data. Error message: " + e.getMessage());			
-			}
 		}
 
 	}

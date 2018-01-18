@@ -1,64 +1,93 @@
 package com.lt.grabbing;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
+import org.jsoup.Connection;
+import org.jsoup.Connection.Method;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.ct.lk.domain.Draw;
+import com.lt.util.CommonUnits;
 import com.lt.util.GameCode;
+import com.lt.util.LottoJSUtils;
 import com.lt.util.Market;
 
 public class LottoGrabbingJS extends LottoGrabbingTask {
-	private int ISSUE_PERIOD; //= 10;
-	private String url; //= "http://caipiao.163.com/award/jskuai3/";
+	private String url; // = "http://caipiao.163.com/award/jskuai3/";
 	int error = 1;
-	
-	private static final Logger logger = LoggerFactory.getLogger(LottoGrabbingJS.class);
-	
-	public static void main(String[] args) {
-		LottoGrabbingJS task = new LottoGrabbingJS();
-		task.startGrabbing();
 
-	}
-	
+	private static final Logger logger = LoggerFactory.getLogger(LottoGrabbingJS.class);
+
+	// public static void main(String[] args) {
+	// LottoGrabbingJS task = new LottoGrabbingJS();
+	// task.startGrabbing();
+	// }
+
 	public void startGrabbing() {
+		String resultTime = CommonUnits.getNowDateTime();
 		try {
-			Document doc = Jsoup.connect(url).timeout(10000).get();
-			Elements elements = doc.select(".start");
-			elements.remove(0);
-			elements.remove(0);
-			elements.remove(0);
-			
-			HashMap<String, String>	map = new HashMap<String, String>();
-			String result;
-			for (Element e : elements) {
-				result = e.attr("data-win-number");
-				if (!result.isEmpty()) {
-					map.put("20"+e.attr("data-period"), "["+e.attr("data-win-number").replace(" ", "")+"]");
+			System.out.println("----------lotto JS start----------");
+
+			Connection.Response doc = Jsoup.connect(url).data("index", "1").data("method", "CheckUpdate").timeout(10000)
+					.method(Method.POST).execute();
+
+			String[] tmpDoc = doc.body().split("<tbody>|<\\/tbody>");
+			String tmpHtml = "<table>" + tmpDoc[1] + "</table>";
+			Document xmlDoc = Jsoup.parse(tmpHtml);
+			List<Draw> list = null;
+			List<Draw> drawlist = null;
+			Element newList = LottoJSUtils.getNowNumber(xmlDoc);
+			String newNumber = newList.select("td").get(0).text().substring(0, 8) + "0"
+					+ newList.select("td").get(0).text().substring(8, 10);
+			String startNumber = newNumber.substring(0, 8) + "001";
+			list = drawDAO.getDrawNum(GameCode.K3.name(), Market.JS.name(), newNumber);
+			drawlist = drawDAO.getDrawNumList(GameCode.K3.name(), Market.JS.name(), startNumber, newNumber);
+			HashMap<String, String> awardMap = null;
+			HashMap<String, String> httpRequestInfo = null;
+			String newAward = null;
+
+			if (list.isEmpty() && !drawlist.isEmpty()) {
+				String lastNumber = drawlist.get(drawlist.size() - 1).getNumber();
+				awardMap = supplyNumber(xmlDoc, lastNumber);
+				list = drawlist;
+			}
+
+			if (!list.isEmpty()) {
+				for (Draw dList : list) {
+					String mappingNumber = dList.getNumber();
+					if (awardMap != null) {
+						String tmpMappingNumber = mappingNumber.substring(0,8)+mappingNumber.substring(9,11);
+						newAward = awardMap.get(tmpMappingNumber);
+						if (newAward != null){
+							 drawDAO.updateDrawResult(GameCode.K3.name(), Market.JS.name(), mappingNumber, newAward);
+						 }
+					} else {
+						if (mappingNumber.equals(newNumber) && dList.getResult() == null) {
+							newAward = "[" + newList.select("td").get(1).text() + newList.select("td").get(2).text()
+									+ newList.select("td").get(3).text() + "]";
+
+							httpRequestInfo = new HashMap<String, String>();
+							httpRequestInfo.put("drawId", "" + dList.getId());
+							httpRequestInfo.put("gameCode", GameCode.K3.name());
+							httpRequestInfo.put("market", Market.JS.name());
+							httpRequestInfo.put("drawNumber", mappingNumber);
+							httpRequestInfo.put("drawResultTime", resultTime);
+							httpRequestInfo.put("result", newAward);
+
+							updateData(socketHttpDestination, httpRequestInfo, logger);
+							drawDAO.insertLog(httpRequestInfo, 0);
+						}
+					}
 				}
 			}
-			List<String> drawNumberList = new ArrayList<String>(map.keySet());
-			Collections.sort(drawNumberList);
-			Collections.reverse(drawNumberList);
-						
-			String drawNumber = "";
-			String drawResult = "";
-			int numOfDatas = drawNumberList.size();
-			if (numOfDatas >= ISSUE_PERIOD) numOfDatas = ISSUE_PERIOD;	
-			for (int i = 0; i < numOfDatas; i++) {
-				drawNumber = drawNumberList.get(i);
-				drawResult = map.get(drawNumber);
 
-				processDrawData(drawNumber, drawResult);
-			}
+			System.out.println("----------lotto JS end----------");
 			error = 1;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -68,39 +97,19 @@ public class LottoGrabbingJS extends LottoGrabbingTask {
 				changeIP();
 			} else {
 				logger.error("Error in drawing " + Market.JS.name() + " data. Error message: " + e.getMessage());
+				drawDAO.insertErrorLog(GameCode.K3.name(), Market.JS.name(), resultTime, 1);
 				error = 1;
 			}
-		} 
-	}
-
-	private void processDrawData(String drawNumber, String drawResult) {
-		List<Draw> checkResult = drawDAO.selectByDrawNumberAndMarket(Market.JS.name(), drawNumber, GameCode.K3.name());
-
-		if (!checkResult.isEmpty()) {
-			Draw draw = checkResult.get(0);
-			HashMap<String, String> httpRequestInfo = new HashMap<String, String>();
-			
-			try {				
-				httpRequestInfo.put("drawId", "" + draw.getId());
-				httpRequestInfo.put("gameCode", GameCode.K3.name());
-				httpRequestInfo.put("market", Market.JS.name());
-				httpRequestInfo.put("drawNumber", drawNumber);
-				httpRequestInfo.put("result", drawResult);
-
-				if (draw.getResult() == null || draw.getResult().length() == 0) {
-					updateData(socketHttpDestination, httpRequestInfo, logger);
-				}
-
-			} catch (Exception e) {
-				e.printStackTrace();				
-				logger.error("Error in drawing " + Market.JS.name() + " data. Error message: " + e.getMessage());					
-			}
 		}
-
 	}
 
-	public void setISSUE_PERIOD(int ISSUE_PERIOD) {
-		this.ISSUE_PERIOD = ISSUE_PERIOD;
+	public HashMap<String, String> supplyNumber(Document xmlDoc, String lastNumber) throws IOException {
+
+		HashMap<String, String> awardMap = new HashMap<String, String>();
+
+		awardMap = LottoJSUtils.Crawl(xmlDoc, lastNumber);
+
+		return awardMap;
 	}
 
 	public void setUrl(String url) {
