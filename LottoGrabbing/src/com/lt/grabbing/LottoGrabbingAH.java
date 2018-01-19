@@ -24,11 +24,11 @@ public class LottoGrabbingAH extends LottoGrabbingTask {
 	
 	private static final Logger logger = LoggerFactory.getLogger(LottoGrabbingAH.class);
 
-	public static void main(String[] args) {
-		LottoGrabbingAH task = new LottoGrabbingAH();
-		task.startGrabbing();
-
-	}
+//	public static void main(String[] args) {
+//		LottoGrabbingAH task = new LottoGrabbingAH();
+//		task.startGrabbing();
+//
+//	}
 
 	public void startGrabbing() {
 		String resultTime = CommonUnits.getNowDateTime();
