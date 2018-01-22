@@ -35,6 +35,7 @@ public class LottoGrabbingJX extends LottoGrabbingTask {
 			List<Draw> list = null;
 			List<Draw> drawlist = null;
 			Element newList = LottoJXUtils.getNowNumber(xmlDoc);
+			if(newList != null){
 			String newNumber = resultTime.substring(0, 2) + newList.select("td").get(1).text();
 			String startNumber = newNumber.substring(0, 8) + "01";
 			list = drawDAO.getDrawNum(GameCode.HL11x5.name(), Market.JX.name(), newNumber);
@@ -75,7 +76,9 @@ public class LottoGrabbingJX extends LottoGrabbingTask {
 					}
 				}				
 			}
-			
+			}else{
+				System.out.println("JX　尚未開獎！！");	
+			}
 			System.out.println("----------lotto JX end----------");
 			error = 1;
 		}catch (Exception e) {

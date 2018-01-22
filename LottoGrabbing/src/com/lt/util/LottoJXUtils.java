@@ -11,8 +11,11 @@ public class LottoJXUtils {
 	public static Element getNowNumber(Document xmlDoc) {
 
 		Element newList = xmlDoc.select(".font_zt > tbody > tr").last();
+		if (newList.select("td").get(1).text().equals("") || newList.select(".kj_hm").text().equals("")){
+			newList = null;
+		}else{
 		System.out.println("JX最新彩期:" + newList.select("td").get(1).text() + " | " + newList.select(".kj_hm").text());
-
+		}
 		return newList;
 	}
 

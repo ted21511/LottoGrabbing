@@ -61,7 +61,7 @@ public class LottoGrabbingBJ extends LottoGrabbingTask {
 				
 
 				String newNumber = newlist.get(0).text();
-				List<Draw> getStartNB = drawDAO.getStartNumber(GameCode.PK10.name(), Market.BJ.name());
+				List<Draw> getStartNB = drawDAO.getStartNumber(GameCode.PK10.name(), Market.BJ.name(), newNumber);
 				String startNumber = getStartNB.get(0).getNumber();
 				List<Draw> list = null;
 				List<Draw> drawlist = null;
