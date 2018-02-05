@@ -75,7 +75,6 @@ public class LottoGrabbingCQ extends LottoGrabbingTask {
 							httpRequestInfo.put("result", newAward);
 
 							updateData(socketHttpDestination, httpRequestInfo, logger);
-							drawDAO.insertLog(httpRequestInfo,0);
 						}
 					}
 				}

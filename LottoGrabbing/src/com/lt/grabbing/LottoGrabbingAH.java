@@ -102,7 +102,6 @@ public class LottoGrabbingAH extends LottoGrabbingTask {
 
 				if (draw.getResult() == null || draw.getResult().length() == 0) {
 					updateData(socketHttpDestination, httpRequestInfo, logger);
-					drawDAO.insertLog(httpRequestInfo,0);
 				}
 			
 		}

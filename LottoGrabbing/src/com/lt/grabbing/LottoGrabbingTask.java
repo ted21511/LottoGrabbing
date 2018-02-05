@@ -63,6 +63,7 @@ public class LottoGrabbingTask extends Thread {
 			con.data(httpRequestInfo);
 			con.timeout(10000);
 			response = con.post();
+			drawDAO.insertLog(httpRequestInfo, 0);
 			String rd = response.select("body").text();
 
 			String line = "";
