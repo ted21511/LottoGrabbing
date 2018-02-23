@@ -54,9 +54,11 @@ public class LottoGrabbingBJ extends LottoGrabbingTask {
 		try {
 			if (!useIPList.isEmpty()) {
 
-				changeIP(useIPList, error);
+				UseIPInfo porxyIp = new UseIPInfo();
+				porxyIp = changeIP(useIPList, error);
+				int port = Integer.parseInt(porxyIp.getPort());			
 				String pageUrl = url + page;
-				Document xmlDoc = Jsoup.connect(pageUrl).timeout(5000).post();
+				Document xmlDoc = Jsoup.connect(pageUrl).proxy(porxyIp.getIp(),port).timeout(5000).post();
 				Elements newlist = LottoBJUtils.getNowNumber(xmlDoc);
 				
 
@@ -109,8 +111,8 @@ public class LottoGrabbingBJ extends LottoGrabbingTask {
 				System.out.println("目前無ip可以使用orIP回應速度過慢");
 				drawDAO.insertErrorLog(GameCode.PK10.name(), Market.BJ.name(), resultTime, 4);
 			}
-			System.getProperties().remove("http.proxyHost");
-			System.getProperties().remove("http.proxyPort");
+//			System.getProperties().remove("http.proxyHost");
+//			System.getProperties().remove("http.proxyPort");
 			error = 1;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -126,7 +128,7 @@ public class LottoGrabbingBJ extends LottoGrabbingTask {
 		}
 	}
 
-	public void changeIP(List<UseIPInfo> useIPList, int error) {
+	public UseIPInfo changeIP(List<UseIPInfo> useIPList, int error) {
 
 		int errorCount = error - 1;
 
@@ -135,13 +137,16 @@ public class LottoGrabbingBJ extends LottoGrabbingTask {
 		}
 		String ip = useIPList.get(errorCount).getIp();
 		String port = useIPList.get(errorCount).getPort();
-
+		UseIPInfo porxyIp = new UseIPInfo();
+		
 		System.out.println("ip:" + ip + "|port:" + port);
 
-		System.getProperties().setProperty("proxySet", "true");
-		System.getProperties().setProperty("http.proxyHost", ip);
-		System.getProperties().setProperty("http.proxyPort", port);
-
+		porxyIp.setIp(ip);
+		porxyIp.setPort(port);
+//		System.getProperties().setProperty("proxySet", "true");
+//		System.getProperties().setProperty("http.proxyHost", ip);
+//		System.getProperties().setProperty("http.proxyPort", port);
+		return porxyIp;
 	}
 
 	public List<UseIPInfo> checkCNIP(String resultTime) {
