@@ -109,7 +109,6 @@ public class LottoGrabbingBJ extends LottoGrabbingTask {
 
 			} else {
 				System.out.println("目前無ip可以使用orIP回應速度過慢");
-				drawDAO.insertErrorLog(GameCode.PK10.name(), Market.BJ.name(), resultTime, 4);
 			}
 //			System.getProperties().remove("http.proxyHost");
 //			System.getProperties().remove("http.proxyPort");
@@ -192,7 +191,6 @@ public class LottoGrabbingBJ extends LottoGrabbingTask {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			drawDAO.insertErrorLog(GameCode.PK10.name(), Market.BJ.name(), resultTime, 3);
 		}
 		return ipList;
 	}
@@ -222,6 +220,9 @@ public class LottoGrabbingBJ extends LottoGrabbingTask {
 				}
 			}
 
+			if(ipList.isEmpty()){
+				drawDAO.insertErrorLog(GameCode.PK10.name(), Market.BJ.name(), resultTime, 4);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			drawDAO.insertErrorLog(GameCode.PK10.name(), Market.BJ.name(), resultTime, 3);
