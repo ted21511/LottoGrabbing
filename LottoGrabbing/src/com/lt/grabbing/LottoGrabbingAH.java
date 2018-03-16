@@ -33,7 +33,7 @@ public class LottoGrabbingAH extends LottoGrabbingTask {
 	public void startGrabbing() {
 		String resultTime = CommonUnits.getNowDateTime();
 		try {
-			System.out.println("----------lotto AH start----------");
+			System.out.println("----------k3 AH start----------");
 			Pattern pattern = Pattern.compile("[0-9]*");
 			Document doc = Jsoup.connect(url).timeout(10000).get();
 
@@ -69,7 +69,7 @@ public class LottoGrabbingAH extends LottoGrabbingTask {
 					processDrawData(drawNumber, drawResult, resultTime);
 				}
 			}
-			System.out.println("----------lotto AH end----------");
+			System.out.println("----------k3 AH end----------");
 			error = 1;
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -38,7 +38,7 @@ public class LottoGrabbingBJ extends LottoGrabbingTask {
 
 	public void startGrabbing() {
 
-		System.out.println("----------Lotto BJ start----------");
+		System.out.println("----------pk10 BJ start----------");
 		String resultTime = CommonUnits.getNowDateTime();
 		List<UseIPInfo> useIPList = new ArrayList<UseIPInfo>();
 		useIPList = checkCNIP(resultTime);
@@ -46,7 +46,7 @@ public class LottoGrabbingBJ extends LottoGrabbingTask {
 			useIPList = subCheckCNIP(useIPList,resultTime);
 		}	
 		startMain(useIPList,resultTime);
-		System.out.println("----------Lotto BJ end----------");
+		System.out.println("----------pk10 BJ end----------");
 
 	}
 

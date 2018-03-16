@@ -19,7 +19,7 @@ public enum Market {
 	// PK10
     BJ("BJ", "PK10"),
 	// M6
-    HK("HK", "M6");
+    HK("HK", "MARK6");
     
     private final String marketName;
     private final String gameCode;

@@ -32,7 +32,7 @@ public class LottoGrabbingJS extends LottoGrabbingTask {
 	public void startGrabbing() {
 		String resultTime = CommonUnits.getNowDateTime();
 		try {
-			System.out.println("----------lotto JS start----------");
+			System.out.println("----------k3 JS start----------");
 
 			Connection.Response doc = Jsoup.connect(url).data("index", "1").data("method", "CheckUpdate").timeout(10000)
 					.method(Method.POST).execute();
@@ -86,7 +86,7 @@ public class LottoGrabbingJS extends LottoGrabbingTask {
 				}
 			}
 
-			System.out.println("----------lotto JS end----------");
+			System.out.println("----------k3 JS end----------");
 			error = 1;
 		} catch (Exception e) {
 			e.printStackTrace();

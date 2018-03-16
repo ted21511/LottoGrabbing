@@ -30,7 +30,7 @@ public class LottoGrabbingJX extends LottoGrabbingTask {
 	public void startGrabbing() {
 		String resultTime = CommonUnits.getNowDateTime();
 		try {
-			System.out.println("----------lotto JX start----------");
+			System.out.println("----------11x5 JX start----------");
 			Document xmlDoc = Jsoup.connect(url).timeout(10000).post();
 			List<Draw> list = null;
 			List<Draw> drawlist = null;
@@ -78,7 +78,7 @@ public class LottoGrabbingJX extends LottoGrabbingTask {
 			}else{
 				System.out.println("JX　尚未開獎！！");	
 			}
-			System.out.println("----------lotto JX end----------");
+			System.out.println("----------11x5 JX end----------");
 			error = 1;
 		}catch (Exception e) {
 			e.printStackTrace();

@@ -32,7 +32,7 @@ public class LottoGrabbingSD extends LottoGrabbingTask {
 	public void startGrabbing() {
 		String resultTime = CommonUnits.getNowDateTime();
 		try {
-			System.out.println("----------lotto SD start----------");
+			System.out.println("----------11x5 SD start----------");
 			Document doc= Jsoup.parse(new URL(url), 10000);
 			Elements tablelist = doc.select("table");
 			if (tablelist.size() >= 15) {
@@ -60,7 +60,7 @@ public class LottoGrabbingSD extends LottoGrabbingTask {
 					removeProcessedData(datas);
 				}
 			}
-			System.out.println("----------lotto SD end----------");
+			System.out.println("----------11x5 SD end----------");
 			error = 1;
 		} catch (Exception e) {
 			e.printStackTrace();

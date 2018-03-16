@@ -61,7 +61,8 @@
 
 	
 	<bean id="DrawDAO" class="com.lt.dao.DrawDAO" >
-		<property name="genericHibernateDao" ref="genericHibernateDao" />		
+		<property name="genericHibernateDao" ref="genericHibernateDao" />	
+		<property name="dataSource" ref="dataSource" />	
 	</bean>
 	
 	<bean id="LottoKenoGrabbingTask" class="com.lt.grabbing.LottoGrabbingTask" init-method="startGrabbing">
@@ -109,6 +110,10 @@
 		<property name="url" value="${lt.bj.url}" />
 	</bean>
 	
+	<bean id="LottoGrabbingHK" class="com.lt.grabbing.LottoGrabbingHK" >
+		<property name="url" value="${hk.url}" />
+	</bean>
+	
 	<bean id="LottoGrabbingAH" class="com.lt.grabbing.LottoGrabbingAH" >
 		<property name="url" value="${ah.url}" />
 		<property name="ISSUE_PERIOD" value="${issue.period}" />
@@ -119,9 +124,9 @@
 		<property name="url" value="${js.url}" />
 	</bean>
 	
-	<bean id="LottoGrabbingCheck" class="com.lt.grabbing.LottoGrabbingCheck" >
-		
-	</bean>
+	<bean id="LottoGrabbingCheck" class="com.lt.grabbing.LottoGrabbingCheck" ></bean>
+	
+	<bean id="GenerateDrawMark6" class="com.lt.grabbing.GenerateDrawMark6" ></bean>
 
 	<!-- TransactionManager -->
 	<bean id="transactionManager"
