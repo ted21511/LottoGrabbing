@@ -39,7 +39,7 @@ public class LottoGrabbingCheck extends LottoGrabbingTask{
             output.write(resultStr);
             output.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(e.toString());
         }
 	
 		System.out.println("********** End Lotto Grabbing Checking **********");

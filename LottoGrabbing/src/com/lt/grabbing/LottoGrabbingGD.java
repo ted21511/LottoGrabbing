@@ -67,7 +67,7 @@ public class LottoGrabbingGD extends LottoGrabbingTask {
 			System.out.println("----------11x5 GD end----------");
 			error = 1;
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.out.println(e.toString());
 			if (error <= 3) {
 				System.out.println("GD錯誤次數:" + error);
 				error++;

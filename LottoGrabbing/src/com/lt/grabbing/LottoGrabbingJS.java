@@ -89,7 +89,7 @@ public class LottoGrabbingJS extends LottoGrabbingTask {
 			System.out.println("----------k3 JS end----------");
 			error = 1;
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.out.println(e.toString());
 			if (error <= 3) {
 				System.out.println("JS錯誤次數:" + error);
 				error++;

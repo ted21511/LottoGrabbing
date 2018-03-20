@@ -1,9 +1,11 @@
 package com.lt.grabbing;
 
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
+import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -30,19 +32,19 @@ public class LottoGrabbingXJ extends LottoGrabbingTask {
 		String resultTime = CommonUnits.getNowDateTime();
 		try {
 			System.out.println("----------lotto XJ start----------");
-			Document xmlDoc = Jsoup.connect(url).timeout(10000).post();
+			
+			String selectDate = LottoXJUtils.getSelectDate();
+			Document xmlDoc = Jsoup.connect(url).data("selectDate",selectDate).timeout(10000).post();			
+			HashMap<String, JSONObject> newlist = LottoXJUtils.getNowNumber(xmlDoc);			
+			String newNumber = newlist.get("firstAward").get("lotteryIssue").toString();
+			String startNumber =newlist.get("lastAward").get("lotteryIssue").toString();
 			List<Draw> list = null;
 			List<Draw> drawlist = null;
-			Element newList = LottoXJUtils.getNowNumber(xmlDoc);
-			if (newList != null) {
-				String tmpNewNumber = newList.select(".z_bg_05").get(1).text();
-				String newNumber = tmpNewNumber.substring(0, 8) + tmpNewNumber.substring(9, 11);
-				String startNumber = newNumber.substring(0, 8) + "01";
-				list = drawDAO.getDrawNum(GameCode.LT.name(), Market.XJ.name(), newNumber);
-				drawlist = drawDAO.getDrawNumList(GameCode.LT.name(), Market.XJ.name(), startNumber, newNumber);
-				HashMap<String, String> awardMap = null;
-				HashMap<String, String> httpRequestInfo = null;
-				String newAward = null;
+			list = drawDAO.getDrawNum(GameCode.LT.name(), Market.XJ.name(), newNumber);
+			drawlist = drawDAO.getDrawNumList(GameCode.LT.name(), Market.XJ.name(), startNumber, newNumber);						
+			HashMap<String, String> awardMap = null;
+			HashMap<String, String> httpRequestInfo = null;
+			String newAward = null;
 
 				if (list.isEmpty() && !drawlist.isEmpty()) {
 					String lastNumber = drawlist.get(drawlist.size() - 1).getNumber();
@@ -62,8 +64,8 @@ public class LottoGrabbingXJ extends LottoGrabbingTask {
 						} else {
 
 							if (mappingNumber.equals(newNumber) && dList.getResult() == null) {
-
-								newAward = "[" + newList.select(".z_bg_13").text() + "]";
+                                String tmpNewAward = newlist.get("firstAward").get("lotteryNumber").toString().replace(",", "");
+								newAward = "[" + tmpNewAward + "]";
 								httpRequestInfo = new HashMap<String, String>();
 								httpRequestInfo.put("drawId", "" + dList.getId());
 								httpRequestInfo.put("gameCode", GameCode.LT.name());
@@ -79,13 +81,11 @@ public class LottoGrabbingXJ extends LottoGrabbingTask {
 					}
 
 				}
-			}else{
-				System.out.println("XJ最新彩期: 尚未開獎!!");
-			}
+			
 			System.out.println("----------lotto XJ end----------");
 			error = 1;
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.out.println(e.toString());
 			if (error <= 3) {
 				System.out.println("XJ錯誤次數:" + error);
 				error++;

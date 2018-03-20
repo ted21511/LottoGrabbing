@@ -86,7 +86,7 @@ public class GenerateDrawMark6 extends LottoGrabbingTask {
 			System.out.println("----------GenerateDraw Mark6 end----------");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println(e.toString());
 		}
 	}
 

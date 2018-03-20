@@ -185,9 +185,9 @@
 				<ref bean="cronTriggerJS" />
 				<ref bean="cronTriggerAH" />
 				<ref bean="cronTriggerBJ" />
-				<ref bean="cronTriggerHK" />
+<!-- 				<ref bean="cronTriggerHK" /> -->
 				<ref bean="cronTriggerCheck" />
-	            <ref bean="cronTriggerDrawMark6" />
+<!-- 	            <ref bean="cronTriggerDrawMark6" /> -->
 			</list>
 		</property>
 		<property name="quartzProperties">

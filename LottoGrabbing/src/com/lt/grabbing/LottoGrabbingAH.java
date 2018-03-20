@@ -72,7 +72,7 @@ public class LottoGrabbingAH extends LottoGrabbingTask {
 			System.out.println("----------k3 AH end----------");
 			error = 1;
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.out.println(e.toString());
 			if (error <= 3) {
 				System.out.println("AH錯誤次數:" + error);
 				error++;

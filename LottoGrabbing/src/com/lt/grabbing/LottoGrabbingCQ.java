@@ -83,7 +83,7 @@ public class LottoGrabbingCQ extends LottoGrabbingTask {
 			System.out.println("----------lotto CQ end----------");
 			error = 1;
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.out.println(e.toString());
 			if (error <= 3) {
 				System.out.println("CQ錯誤次數:" + error);
 				error++;

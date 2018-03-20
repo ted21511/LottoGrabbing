@@ -133,7 +133,6 @@ public class LottoGrabbingHK extends LottoGrabbingTask {
 	public Set<String> setCheckBall(String resultTime) {
 		Set<String> check = new HashSet<String>();
 		try {
-
 			Document xmlDoc = Jsoup.connect(url).timeout(10000).get();
 			Element results = xmlDoc
 					.select("#_ctl0_ContentPlaceHolder1_resultsMarkSix_markSixResultTable > tbody > tr ").get(1);
@@ -148,8 +147,8 @@ public class LottoGrabbingHK extends LottoGrabbingTask {
 					check.add(award[1]);
 				}
 			}
-
 		} catch (Exception e) {
+			System.out.println(e.toString());
 			if (error <= 3) {
 				System.out.println("HK錯誤次數:" + error);
 				error++;
@@ -186,7 +185,8 @@ public class LottoGrabbingHK extends LottoGrabbingTask {
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println(e.toString());
+			
 		}
 		return award;
 	}
@@ -213,7 +213,7 @@ public class LottoGrabbingHK extends LottoGrabbingTask {
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println(e.toString());
 		}
 		return award;
 	}
@@ -239,7 +239,7 @@ public class LottoGrabbingHK extends LottoGrabbingTask {
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println(e.toString());
 		}
 		return award;
 	}
