@@ -19,12 +19,6 @@ import com.sun.org.apache.regexp.internal.recompile;
 public class DrawDAO {
 
 	private GenericHibernateDao genericHibernateDao;
-	private DataSource dataSource;
-	Connection con = null;
-
-	public void setDataSource(DataSource dataSource) {
-		this.dataSource = dataSource;
-	}
 
 	public void setGenericHibernateDao(GenericHibernateDao genericHibernateDao) {
 		this.genericHibernateDao = genericHibernateDao;

@@ -62,7 +62,6 @@
 	
 	<bean id="DrawDAO" class="com.lt.dao.DrawDAO" >
 		<property name="genericHibernateDao" ref="genericHibernateDao" />	
-		<property name="dataSource" ref="dataSource" />	
 	</bean>
 	
 	<bean id="LottoKenoGrabbingTask" class="com.lt.grabbing.LottoGrabbingTask" init-method="startGrabbing">
