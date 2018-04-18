@@ -1,20 +1,10 @@
 package com.lt.dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 
-import javax.sql.DataSource;
-
 import org.framework.support.hibernate.GenericHibernateDao;
-import org.jboss.netty.util.internal.UnterminatableExecutor;
-
 import com.ct.lk.domain.Draw;
-import com.steadystate.css.parser.selectors.PseudoClassConditionImpl;
-import com.sun.org.apache.regexp.internal.recompile;
 
 public class DrawDAO {
 

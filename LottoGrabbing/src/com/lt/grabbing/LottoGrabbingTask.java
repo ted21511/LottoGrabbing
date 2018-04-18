@@ -12,8 +12,6 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.lt.dao.DrawDAO;
 import com.lt.util.EmailNotificated;
-import com.lt.util.GameCode;
-import com.lt.util.Market;
 import com.lt.util.SmtpInfo;
 
 public class LottoGrabbingTask extends Thread {
