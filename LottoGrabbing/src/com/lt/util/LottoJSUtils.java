@@ -10,7 +10,7 @@ public class LottoJSUtils {
 	
 	public static Element getNowNumber(Document xmlDoc) {
 
-		Element newList = xmlDoc.select("tr").last();
+		Element newList = xmlDoc.select(".tabtrend > tbody").select("tr").last();
 		String award = newList.select("td").get(1).text()+newList.select("td").get(2).text()+newList.select("td").get(3).text();
     	System.out.println("JS最新彩期:" + newList.select("td").get(0).text() + " | " + award);
 
@@ -19,7 +19,7 @@ public class LottoJSUtils {
 
 	public static HashMap<String, String> Crawl(Document xmlDoc, String lastNumber) {
 		
-		Elements list = xmlDoc.select("tr");
+		Elements list = xmlDoc.select(".tabtrend > tbody").select("tr");
 		lastNumber = lastNumber.substring(0,8)+lastNumber.substring(9,11);
 		long Number = Long.parseLong(lastNumber);
 		

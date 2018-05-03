@@ -34,14 +34,9 @@ public class LottoGrabbingJS extends LottoGrabbingTask {
 		try {
 			System.out.println("----------k3 JS start----------");
 
-			Connection.Response doc = Jsoup.connect(url).data("index", "1").data("method", "CheckUpdate").timeout(10000)
-					.method(Method.POST).execute();
-
-			String[] tmpDoc = doc.body().split("<tbody>|<\\/tbody>");
-			String tmpHtml = "<table>" + tmpDoc[1] + "</table>";
-			Document xmlDoc = Jsoup.parse(tmpHtml);
+			Document xmlDoc = Jsoup.connect(url).timeout(10000).post();		
 			List<Draw> list = null;
-			List<Draw> drawlist = null;
+			List<Draw> drawlist = null;	
 			Element newList = LottoJSUtils.getNowNumber(xmlDoc);
 			String newNumber = newList.select("td").get(0).text().substring(0, 8) + "0"
 					+ newList.select("td").get(0).text().substring(8, 10);
