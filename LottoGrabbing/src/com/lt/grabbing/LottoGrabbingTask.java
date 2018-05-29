@@ -3,6 +3,10 @@ package com.lt.grabbing;
 import java.util.HashMap;
 import java.util.Properties;
 
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLSession;
+
 import org.framework.support.spring.SpringObjectFactory;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -13,6 +17,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import com.lt.dao.DrawDAO;
 import com.lt.util.EmailNotificated;
 import com.lt.util.SmtpInfo;
+import com.lt.ssl.TLSSocketConnectionFactory;
 
 public class LottoGrabbingTask extends Thread {
 
@@ -47,6 +52,8 @@ public class LottoGrabbingTask extends Thread {
 
 	public void startGrabbing() {
 		System.out.println("********** Start Lotto Grabbing... **********");
+		HttpsURLConnection.setDefaultHostnameVerifier(hv);
+		HttpsURLConnection.setDefaultSSLSocketFactory(new TLSSocketConnectionFactory());
 	}
 
 	protected void updateData(String socketHttpDestination, HashMap<String, String> httpRequestInfo, Logger logger) {
@@ -109,4 +116,34 @@ public class LottoGrabbingTask extends Thread {
 		this.drawDAO = drawDAO;
 	}
 
+	static HostnameVerifier hv = new HostnameVerifier() {
+		public boolean verify(String urlHostName, SSLSession session) {
+			System.out.println("Warning: URL Host: " + urlHostName + " vs. " + session.getPeerHost());
+			return true;
+		}
+	};
+
+	static class miTM implements javax.net.ssl.TrustManager, javax.net.ssl.X509TrustManager {
+		public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+			return null;
+		}
+
+		public boolean isServerTrusted(java.security.cert.X509Certificate[] certs) {
+			return true;
+		}
+
+		public boolean isClientTrusted(java.security.cert.X509Certificate[] certs) {
+			return true;
+		}
+
+		public void checkServerTrusted(java.security.cert.X509Certificate[] certs, String authType)
+				throws java.security.cert.CertificateException {
+			return;
+		}
+
+		public void checkClientTrusted(java.security.cert.X509Certificate[] certs, String authType)
+				throws java.security.cert.CertificateException {
+			return;
+		}
+	}
 }

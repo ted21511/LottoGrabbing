@@ -167,7 +167,8 @@
  	
  	<bean id="cronTriggerDrawMark6" class="org.springframework.scheduling.quartz.CronTriggerBean">
  		<property name="jobDetail" ref="runGenerateDrawMark6" />
- 		<property name="cronExpression" value="0 0 0 ? * L" />
+<!--  		<property name="cronExpression" value="0 0 0 ? * L" /> -->
+        <property name="cronExpression" value="0 0 12 * * ?" />
 
  	</bean> 
 

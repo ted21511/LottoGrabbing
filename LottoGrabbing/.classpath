@@ -56,5 +56,8 @@
 	<classpathentry kind="lib" path="required-lib/xalan-2.7.1.jar"/>
 	<classpathentry kind="lib" path="required-lib/xercesImpl-2.11.0.jar"/>
 	<classpathentry kind="lib" path="required-lib/xml-apis-1.4.01.jar"/>
+	<classpathentry kind="lib" path="required-lib/bcprov-ext-jdk15on-158.jar"/>
+	<classpathentry kind="lib" path="required-lib/bcprov-jdk15on-158.jar"/>
+	<classpathentry kind="lib" path="required-lib/bctls-jdk15on-158.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
